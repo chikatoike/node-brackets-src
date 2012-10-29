@@ -109,7 +109,7 @@ define(function (require, exports, module) {
     require("search/FindInFiles");
     require("search/FindReplace");
     require("utils/ExtensionUtils");
-    
+        
     // TODO: (issue 1029) Add timeout to main extension loading promise, so that we always call this function
     // Making this fix will fix a warning (search for issue 1029) related to the global brackets 'ready' event.
     function _initExtensions() {
@@ -214,14 +214,17 @@ define(function (require, exports, module) {
         
         EditorManager.setEditorHolder($("#editor-holder"));
 
-        // Let the user know Brackets doesn't run in a web browser yet
-        if (brackets.inBrowser) {
-            Dialogs.showModalDialog(
-                Dialogs.DIALOG_ID_ERROR,
-                Strings.ERROR_IN_BROWSER_TITLE,
-                Strings.ERROR_IN_BROWSER
-            );
-        }
+// [node]: <<<<<< (We need to work in brwoser)
+//        // Let the user know Brackets doesn't run in a web browser yet
+//        if (brackets.inBrowser) {
+//            Dialogs.showModalDialog(
+//                Dialogs.DIALOG_ID_ERROR,
+//                Strings.ERROR_IN_BROWSER_TITLE,
+//                Strings.ERROR_IN_BROWSER
+//            );
+//        }
+// [node]: ======
+// [node]: >>>>>>
 
         _initDragAndDropListeners();
         _initCommandHandlers();

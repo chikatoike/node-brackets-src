@@ -97,6 +97,14 @@ define(function (require, exports, module) {
     // the same thing as 'require' in AMD-wrapped modules. The extension will
     // only be able to load modules that have already been loaded once.
     global.brackets.getModule = require;
+    
+    // [node]: <<<<<< (Replace native file system and app with proxy)
+    // [node]: ======
+    var serverProxy = require("extensions/user/node/ServerProxy");
+    global.brackets.fs = serverProxy.getFileSystem();
+    global.brackets.app = serverProxy.getAppProxy();
+    global.brackets.inBrowser = false;
+    // [node]: >>>>>>
 
     exports.global = global;
 });
