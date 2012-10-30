@@ -82,10 +82,18 @@
     <script src="thirdparty/CodeMirror2/lib/util/searchcursor.js"></script>
     <script src="thirdparty/CodeMirror2/lib/util/search.js"></script>
     <script src="thirdparty/CodeMirror2/lib/util/closetag.js"></script>
-
+    
+    <!-- [node-brackets] Add server variables -->
+    <script type="application/javascript">
+        window.serverVariables = {
+            initialPath: "{{{initialPath}}}",
+            fileService: "{{{fileService}}}"
+        };
+    </script>
+    
 </head>
 <body>
-
+    
     <!-- HTML content is dynamically loaded and rendered by brackets.js.
          Any modules that depend on or modify HTML during load should 
          require the "utils/AppInit" module and install a callback for
@@ -94,6 +102,6 @@
     
     <!-- All other scripts are loaded through require. -->
     <script src="thirdparty/require.js" data-main="brackets"></script>
-
+    
 </body>
 </html>

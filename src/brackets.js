@@ -213,19 +213,7 @@ define(function (require, exports, module) {
         $("body").addClass("platform-" + brackets.platform);
         
         EditorManager.setEditorHolder($("#editor-holder"));
-
-// [node]: <<<<<< (We need to work in brwoser)
-//        // Let the user know Brackets doesn't run in a web browser yet
-//        if (brackets.inBrowser) {
-//            Dialogs.showModalDialog(
-//                Dialogs.DIALOG_ID_ERROR,
-//                Strings.ERROR_IN_BROWSER_TITLE,
-//                Strings.ERROR_IN_BROWSER
-//            );
-//        }
-// [node]: ======
-// [node]: >>>>>>
-
+        
         _initDragAndDropListeners();
         _initCommandHandlers();
         KeyBindingManager.init();
