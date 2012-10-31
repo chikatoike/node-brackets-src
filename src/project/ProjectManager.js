@@ -661,8 +661,12 @@ define(function (require, exports, module) {
      * Initial project path is stored in prefs, which defaults to the welcome project on
      * first launch. 
      */
-    function getInitialProjectPath() {
-        return updateWelcomeProjectPath(_prefs.getValue("projectPath"));
+    function getInitialProjectPath() {        
+        // [node]: <<<<<< (Client cannot choose project folder. Initial path is always defined on the server.)
+        // return updateWelcomeProjectPath(_prefs.getValue("projectPath"));
+        // [node]: ======
+        return "/";
+        // [node]: >>>>>>
     }
     
     /**

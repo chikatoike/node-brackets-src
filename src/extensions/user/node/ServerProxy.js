@@ -9,47 +9,36 @@ define(function (require, exports, module) {
     
     var messageCount = 0;
     var callbacks = {};
-    var wsUrl = "ws://" + window.location.host;
-    var ws = new WebSocket(wsUrl);
+    var svcUrl = window.serverVariables.fileService;
     var isOpen = false;
     var pendingCmds;
 
     function sendCommand(cmd) {
         console.log("sending: " + cmd);
-        ws.send(cmd);
-    }
-
-    ws.onopen = function () {
-        isOpen = true;
-        if (pendingCmds) {
-            pendingCmds.forEach(function (cmd) {
-                sendCommand(cmd);
+        $.ajax({url: svcUrl,
+                type: "POST",
+                contentType: "application/json",
+                data: cmd
+               })
+            .done(function (m) {
+                console.log("received: " + m.id);
+                if (m.id === "runCommand") {
+                    CommandManager.execute(m.commandId);
+                } else if (callbacks.hasOwnProperty(m.id)) {
+                    callbacks[m.id].apply(window, m.result);
+                    delete callbacks[m.id];
+                }
+            })
+            .fail(function (jqXHR, textStatus) {
+                console.log("received error: " + textStatus);
+                alert("received error: " + textStatus);
             });
-        }
-    };
-
-    ws.onmessage = function (message) {
-        var m = JSON.parse(message.data);
-        console.log("received: " + m.id);
-        if (m.id === "runCommand") {
-            CommandManager.execute(m.commandId);
-        } else if (callbacks.hasOwnProperty(m.id)) {
-            callbacks[m.id].apply(window, m.result);
-            delete callbacks[m.id];
-        }
-    };
+    }
 
     function callCommand(namespace, command, args, isAsync, callback) {
         var id = messageCount++;
         callbacks[id] = callback;
         var cmd = JSON.stringify({id: id, namespace: namespace, command: command, args: args, isAsync: isAsync});
-        if (!isOpen) {
-            if (!pendingCmds) {
-                pendingCmds = [];
-            }
-            pendingCmds.push(cmd);
-            return;
-        }
         sendCommand(cmd);
     }
 
