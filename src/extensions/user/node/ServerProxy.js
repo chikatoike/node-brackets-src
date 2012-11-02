@@ -1,11 +1,12 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
-/*global define, $, FileError, brackets, unescape, window, WebSocket */
+/*global define, $, FileError, brackets, unescape, window, serverVariables */
 
 
 define(function (require, exports, module) {
     'use strict';
 
-    var CommandManager = require("command/CommandManager");
+    var CommandManager      = require("command/CommandManager"),
+        StringUtils         = require("utils/StringUtils");
     
     var messageCount = 0;
     var callbacks = {};
@@ -30,8 +31,23 @@ define(function (require, exports, module) {
                 }
             })
             .fail(function (jqXHR, textStatus) {
-                console.log("received error: " + textStatus);
-                alert("received error: " + textStatus);
+                var message;
+                if (jqXHR.isRejected()) {
+                    var url = window.location.origin + svcUrl;
+                    message = StringUtils.format("A request to <strong>\"{0}\"</strong> server was rejected. Please make sure the server is up and running.", url);
+                } else {
+                    message = StringUtils.format("The server returned an error; status: {0}, state: {1}", textStatus, jqXHR.state());
+                }
+                console.log(message);
+                
+                if (brackets) {
+                    var dialogs = brackets.getModule("widgets/Dialogs");
+                    dialogs.showModalDialog(
+                        dialogs.DIALOG_ID_ERROR,
+                        "Server Error",
+                        message
+                    );
+                }
             });
     }
 
@@ -263,7 +279,7 @@ define(function (require, exports, module) {
      * Quits native shell application
      */
     app.quit = function () {
-        console.log("Error: app.quit not implemented yet");
+        window.close();
     };
 
     /**
@@ -287,6 +303,10 @@ define(function (require, exports, module) {
     
     app.addMenuItem = function (parentMenuId, id, name, cmd, keyBindings, position, relativeID) {
         callCommand("app", "addMenuItem", [parentMenuId, id, name, cmd, keyBindings, position, relativeID], false);
+    };
+    
+    app.getApplicationSupportDirectory = function () {
+        return serverVariables.bracketsRoot;
     };
 
     exports.getFileSystem = getFileSystem;
