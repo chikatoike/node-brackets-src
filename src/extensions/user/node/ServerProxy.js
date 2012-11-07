@@ -158,6 +158,10 @@ define(function (require, exports, module) {
         callCommand("fs", "readdir", [path], true, callback);
     };
     
+    fs.makedir = function (path, mode, callback) {
+        callCommand("fs", "mkdir", [path, mode], true, callback);
+    };
+    
     /**
      * Get information for the selected file or directory.
      *

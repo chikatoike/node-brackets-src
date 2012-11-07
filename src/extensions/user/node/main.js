@@ -10,6 +10,6 @@ define(function (require, exports, module) {
         Commands        = brackets.getModule("command/Commands");
 
     
-    var cmd = CommandManager.get(Commands.FILE_OPEN_FOLDER);
+    var cmd = CommandManager.get(Commands.FILE_OPEN);
     cmd._enabled = false;
 });
