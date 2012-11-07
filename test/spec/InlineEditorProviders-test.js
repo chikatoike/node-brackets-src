@@ -23,7 +23,7 @@
 
 
 /*jslint vars: true, plusplus: true, devel: true, browser: true, nomen: true, indent: 4, maxerr: 50 */
-/*global define, describe, it, expect, beforeEach, afterEach, waitsFor, waitsForDone, runs, $, brackets */
+/*global define, describe, it, expect, beforeEach, afterEach, waits, waitsFor, waitsForDone, runs, $, brackets */
 
 define(function (require, exports, module) {
     'use strict';
@@ -444,6 +444,9 @@ define(function (require, exports, module) {
                     expect(inlineEditor.document.isDirty).toBeTruthy();
                     expect(hostEditor.document.isDirty).toBeFalsy();
                     
+                    // verify focus is in inline editor
+                    expect(inlineEditor.hasFocus()).toBeTruthy();
+                    
                     // execute file save command
                     testWindow.executeCommand(Commands.FILE_SAVE).done(function () {
                         saved = true;
@@ -455,6 +458,9 @@ define(function (require, exports, module) {
                 waitsFor(function () { return saved && !err; }, "save timeout", 1000);
                 
                 runs(function () {
+                    // verify focus is still in inline editor
+                    expect(inlineEditor.hasFocus()).toBeTruthy();
+                    
                     // read saved file contents
                     FileUtils.readAsText(inlineEditor.document.file).done(function (text) {
                         savedText = text;

@@ -48,12 +48,13 @@ define(function (require, exports, module) {
         // On Windows, $.get() fails if the url is a full pathname. To work around this,
         // prepend "file:///". On the Mac, $.get() works fine if the url is a full pathname,
         // but *doesn't* work if it is prepended with "file://". Go figure.
+        var getUrl = url;
         
-        // [node]: <<<<<< (Since we are serving the files from HTTP server the ‘file:///’ protocol doesn’t apply.)
-        // $.get((brackets.platform === "win" ? "file:///" : "") + url).done(function () {
-        // [node]: ======
-        $.get(url).done(function () {
-        // [node]: >>>>>>
+        if (brackets.platform === "win" && url.indexOf(":") !== -1) {
+            getUrl = "file:///" + url;
+        }
+        
+        $.get(getUrl).done(function () {
             var $link = $("<link/>");
             
             $link.attr({

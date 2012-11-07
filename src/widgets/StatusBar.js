@@ -189,10 +189,10 @@ define(function (require, exports, module) {
 
         s = s.toLowerCase();
 
-        // Handle special cases
+        // Handle special cases (in order of likely occurrance)
         if (s === "javascript") {
             return "JavaScript";
-        } else if (s === "html") {
+        } else if (s === "html" || s === "htmlmixed") {
             return "HTML";
         } else if (s === "css") {
             return "CSS";
@@ -204,6 +204,12 @@ define(function (require, exports, module) {
             return "PHP";
         } else if (s === "xml") {
             return "XML";
+        } else if (s === "yaml") {
+            return "YAML";
+        } else if (s === "coffeescript") {
+            return "CoffeeScript";
+        } else if (s === "mysql") {
+            return "SQL";
         }
 
         // Generic case
