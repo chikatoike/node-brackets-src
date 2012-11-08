@@ -1,4 +1,14 @@
 /*
+ ************************************************************************
+ * This is modified version of Recent Projects module.
+ * Recent Projects module is disabled as we want to serve projects only from 
+ * the current server. Instead, we show all root directories configured for 
+ * the instance.
+ ************************************************************************
+ */
+
+
+/*
  * Copyright (c) 2012 Adobe Systems Incorporated. All rights reserved.
  *  
  * Permission is hereby granted, free of charge, to any person obtaining a
@@ -44,6 +54,8 @@ define(function (require, exports, module) {
         FileUtils               = brackets.getModule("file/FileUtils"),
         NativeFileSystem        = brackets.getModule("file/NativeFileSystem").NativeFileSystem;
     
+    var ms = brackets.getModule("menuSetup.js");
+    
     var $dropdownToggle,
         $settings;
     
@@ -59,25 +71,7 @@ define(function (require, exports, module) {
         }
         return recentProjects;
     }
-    
-    /**
-     * Add a project to the stored list of recent projects, up to MAX_PROJECTS.
-     */
-    function add() {
-        var root = FileUtils.canonicalizeFolderPath(ProjectManager.getProjectRoot().fullPath),
-            prefs = PreferencesManager.getPreferenceStorage(PREFERENCES_KEY),
-            recentProjects = getRecentProjects(),
-            index = recentProjects.indexOf(root);
-        if (index !== -1) {
-            recentProjects.splice(index, 1);
-        }
-        recentProjects.unshift(root);
-        if (recentProjects.length > MAX_PROJECTS) {
-            recentProjects = recentProjects.slice(0, MAX_PROJECTS);
-        }
-        prefs.setValue("recentProjects", recentProjects);
-    }
-    
+        
     /**
      * Create the DOM node for a single recent folder path in the dropdown menu.
      * @param {string} path The full path to the folder.
@@ -159,35 +153,6 @@ define(function (require, exports, module) {
                                 }
                             });
                         closeDropdown();
-                    })
-                    .mouseenter(function (e) {
-                        var $target = $(e.currentTarget),
-                            $del =  renderDelete()
-                                .click(function () {
-                                 // remove the project from the preferences.
-                                    var prefs = PreferencesManager.getPreferenceStorage(PREFERENCES_KEY),
-                                        recentProjects = getRecentProjects(),
-                                        index = recentProjects.indexOf($(this).data("path")),
-                                        newProjects = [],
-                                        i;
-                                    for (i = 0; i < recentProjects.length; i++) {
-                                        if (i !== index) {
-                                            newProjects.push(recentProjects[i]);
-                                        }
-                                    }
-                                    prefs.setValue("recentProjects", newProjects);
-                                    closeDropdown();
-                                });
-                        
-                        $(this).append($del);
-
-                        $del.css("right", 5);
-                        $del.css("top", $target.position().top + 6);
-                        $del.css("display", "inline-block");
-                        $del.data("path", $(this).data("path"));
-                    })
-                    .mouseleave(function () {
-                        $("#recent-folder-delete").remove();
                     });
                 
                 $("<li></li>")
@@ -196,22 +161,6 @@ define(function (require, exports, module) {
                 hasProject = true;
             }
         });
-       
-       
-        if (hasProject) {
-            $("<li class='divider'>").appendTo($dropdown);
-        }
-        // Entry for project settings dialog
-        $("<li><a id='project-settings-link'>" + Strings.CMD_PROJECT_SETTINGS + "</a></li>")
-            .click(function () {
-                CommandManager.execute(Commands.FILE_PROJECT_SETTINGS);
-            })
-            .appendTo($dropdown);
-        $("<li><a id='open-folder-link'>" + Strings.CMD_OPEN_FOLDER + "</a></li>")
-            .click(function () {
-                CommandManager.execute(Commands.FILE_OPEN_FOLDER);
-            })
-            .appendTo($dropdown);
         
         $dropdown.css({
             left: toggleOffset.left,
@@ -243,9 +192,6 @@ define(function (require, exports, module) {
     // Initialize extension
     ExtensionUtils.loadStyleSheet(module, "styles.css");
     
-    $(ProjectManager).on("projectOpen", add);
-    $(ProjectManager).on("beforeProjectClose", add);
-
     AppInit.htmlReady(function () {
         $("#project-title")
             .wrap("<div id='project-dropdown-toggle'></div>")
