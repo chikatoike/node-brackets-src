@@ -705,7 +705,7 @@ define(function (require, exports, module) {
         // [node]: <<<<<< (Client cannot choose project folder. Initial path is always defined on the server.)
         // return updateWelcomeProjectPath(_prefs.getValue("projectPath"));
         // [node]: ======
-        return "/";
+        return window.serverVariables.currentRootFolder;
         // [node]: >>>>>>
     }
     
