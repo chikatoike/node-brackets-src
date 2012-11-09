@@ -34,7 +34,7 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
 /*global define, brackets, window, $ */
 
-define(function (require, exports, module) {
+define(["require", "exports", "module", "MenuSetup"], function (require, exports, module) {
     "use strict";
     
     var PREFERENCES_KEY = "com.adobe.brackets.brackets-recent-projects";
@@ -53,9 +53,7 @@ define(function (require, exports, module) {
         PopUpManager            = brackets.getModule("widgets/PopUpManager"),
         FileUtils               = brackets.getModule("file/FileUtils"),
         NativeFileSystem        = brackets.getModule("file/NativeFileSystem").NativeFileSystem;
-    
-    var ms = brackets.getModule("menuSetup.js");
-    
+        
     var $dropdownToggle,
         $settings;
     

@@ -8,17 +8,19 @@ define(function (require, exports, module) {
         CommandManager          = brackets.getModule("command/CommandManager"),
         Menus                   = brackets.getModule("command/Menus"),
         KeyBindingManager       = brackets.getModule("command/KeyBindingManager");
-    
-    function setup() {
-        var menu = Menus.getMenu(Menus.AppMenuBar.FILE_MENU);
-        var cmd = CommandManager.get(Commands.FILE_OPEN_FOLDER);
-        cmd._enabled = false;
+            
+    function removeMenuItemAndKeyBindings(menuId, commandId) {
+        var menu = Menus.getMenu(menuId),
+            cmd = CommandManager.get(commandId),
+            bindings = KeyBindingManager.getKeyBindings(commandId);
         
-        menu.removeMenuItem(cmd);
-        
-        cmd = CommandManager.get(Commands.FILE_OPEN);
+        bindings.forEach(function (value, index) {
+            KeyBindingManager.removeBinding(value.key);
+        });
         menu.removeMenuItem(cmd);
     }
     
-    exports.setup = setup;
+    // Remove menu items and key bindings that don’t make sense when Brackets is used in client / server scenario.
+    removeMenuItemAndKeyBindings(Menus.AppMenuBar.FILE_MENU, Commands.FILE_OPEN);
+    removeMenuItemAndKeyBindings(Menus.AppMenuBar.FILE_MENU, Commands.FILE_OPEN_FOLDER);
 });

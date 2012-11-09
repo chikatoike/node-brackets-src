@@ -283,8 +283,13 @@ define(function (require, exports, module) {
      * Quits native shell application
      */
     app.quit = function () {
+        window.open('', '_self', '');
         window.close();
     };
+    
+    app.openLiveBrowser = function (url, enableRemoteDebugging, callback) {
+        console.log("Error: app.openLiveBrowser not implemented yet");
+    }
 
     /**
      * Invokes developer tools application
@@ -300,14 +305,6 @@ define(function (require, exports, module) {
     function getAppProxy() {
         return app;
     }
-    
-    app.addMenu = function (id, name, position, relativeID) {
-        callCommand("app", "addMenu", [id, name, position, relativeID], false);
-    };
-    
-    app.addMenuItem = function (parentMenuId, id, name, cmd, keyBindings, position, relativeID) {
-        callCommand("app", "addMenuItem", [parentMenuId, id, name, cmd, keyBindings, position, relativeID], false);
-    };
     
     app.getApplicationSupportDirectory = function () {
         return serverVariables.bracketsRoot;
