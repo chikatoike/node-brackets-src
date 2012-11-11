@@ -34,8 +34,10 @@ define(function (require, exports, module) {
                 var message;
                 if (jqXHR.isRejected()) {
                     var url = window.location.origin + svcUrl;
+                    // Cannot use Strings.ERROR_REJECTED_REQUEST here because this function invokes Strings before Brackets is initialized.
                     message = StringUtils.format("A request to <strong>\"{0}\"</strong> server was rejected. Please make sure the server is up and running.", url);
                 } else {
+                    // Cannot use Strings.ERROR_REJECTED_REQUEST here because this function invokes Strings before Brackets is initialized.
                     message = StringUtils.format("The server returned an error; status: {0}, state: {1}", textStatus, jqXHR.state());
                 }
                 console.log(message);
@@ -270,9 +272,17 @@ define(function (require, exports, module) {
      * @return None. This is an asynchronous call that sends all return information to the callback.
      */
     fs.unlink = function (path, callback) {
-        console.log("Error: unlink not implemented yet");
+        callCommand("fs", "unlink", [path], true, callback);
     };
 
+    fs.rmdir = function (path, callback) {
+        callCommand("fs", "rmdir", [path], true, callback);
+    };
+    
+    fs.rmdirRecursive = function (path, callback) {
+        callCommand("fs", "rmdirRecursive", [path], true, callback);
+    };
+    
     function getFileSystem() {
         return fs;
     }
@@ -289,7 +299,7 @@ define(function (require, exports, module) {
     
     app.openLiveBrowser = function (url, enableRemoteDebugging, callback) {
         console.log("Error: app.openLiveBrowser not implemented yet");
-    }
+    };
 
     /**
      * Invokes developer tools application

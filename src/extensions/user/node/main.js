@@ -34,7 +34,7 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
 /*global define, brackets, window, $ */
 
-define(["require", "exports", "module", "MenuSetup"], function (require, exports, module) {
+define(["require", "exports", "module", "NodeMenus"], function (require, exports, module) {
     "use strict";
     
     var PREFERENCES_KEY = "com.adobe.brackets.brackets-recent-projects";
