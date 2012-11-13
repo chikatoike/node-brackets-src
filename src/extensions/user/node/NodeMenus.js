@@ -28,7 +28,7 @@ define(function (require, exports, module) {
         bindings.forEach(function (value, index) {
             KeyBindingManager.removeBinding(value.key);
         });
-        
+        menu.removeMenuItem(commandId);
     }
     
     function getErrorMessage(errorCode) {
