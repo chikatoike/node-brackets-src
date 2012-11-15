@@ -13,3 +13,6 @@
 [submodule "src/thirdparty/mustache"]
 	path = src/thirdparty/mustache
 	url = https://github.com/janl/mustache.js.git
+[submodule "src/extensions/user/SpellCheck"]
+	path = src/extensions/user/SpellCheck
+	url = https://github.com/couzteau/SpellCheck.git
