@@ -1,3 +1,6 @@
+[submodule "src/extensions/user/SpellCheck"]
+	path = src/extensions/user/SpellCheck
+	url = https://github.com/couzteau/SpellCheck.git
 [submodule "src/thirdparty/CodeMirror2"]
 	path = src/thirdparty/CodeMirror2
 	url = https://github.com/adobe/CodeMirror2.git
@@ -13,6 +16,3 @@
 [submodule "src/thirdparty/mustache"]
 	path = src/thirdparty/mustache
 	url = https://github.com/janl/mustache.js.git
-[submodule "src/extensions/user/SpellCheck"]
-	path = src/extensions/user/SpellCheck
-	url = https://github.com/couzteau/SpellCheck.git
