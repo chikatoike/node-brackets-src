@@ -19,6 +19,15 @@ define(function (require, exports, module) {
      */
     // FILE
     exports.FILE_DELETE         = "node.file.delete";
+    exports.NODE_MENU           = "node-menu";
+    exports.NODE_BROWSE         = "node.browse";
+    exports.NODE_SERACH_NPM     = "node.search-npm";
+    exports.NODE_MODULES        = "node.modules";
+    exports.NODE_START          = "node.start";
+    exports.NODE_STOP           = "node.stop";
+    exports.NODE_RESTART        = "node.restart";
+    exports.NODE_TERMINAL       = "node.terminal";
+    exports.NODE_OPTIONS        = "node.options";
             
     function removeMenuItemAndKeyBindings(menuId, commandId) {
         var menu = Menus.getMenu(menuId),
@@ -70,13 +79,7 @@ define(function (require, exports, module) {
             });
     }
     
-    // Remove menu items and key bindings that don’t make sense when Brackets is used in client / server scenario.
-    removeMenuItemAndKeyBindings(Menus.AppMenuBar.FILE_MENU, Commands.FILE_OPEN);
-    removeMenuItemAndKeyBindings(Menus.AppMenuBar.FILE_MENU, Commands.FILE_OPEN_FOLDER);
-    
-    // Add new menu items
-    var menu = Menus.getMenu(Menus.AppMenuBar.FILE_MENU);
-    CommandManager.register("Delete", exports.FILE_DELETE, function () {
+    function handleDelete() {
         var entry = ProjectManager.getSelectedItem();
         if (!entry) {
             var doc = DocumentManager.getCurrentDocument();
@@ -118,9 +121,77 @@ define(function (require, exports, module) {
                     });
                 });
         }
-    });
+    }
+    
+    function handleBrowse() {
+        brackets.app.nodeBrowse();
+    }
+    
+    function handleSearchNPM() {
+        brackets.app.nodeSearchNPM();
+    }
+    
+    function handleModules() {
+        brackets.app.nodeModules();
+    }
+    
+    function handleStart() {
+        brackets.app.nodeStart();
+    }
+    
+    function handleStop() {
+        brackets.app.nodeStop();
+    }
+    
+    function handleTerminal() {
+        brackets.app.nodeTerminal();
+    }
+    
+    function handleOptions() {
+        brackets.app.nodeOptions();
+    }
+    
+    // Remove menu items and key bindings that don’t make sense when Brackets is used in client / server scenario.
+    removeMenuItemAndKeyBindings(Menus.AppMenuBar.FILE_MENU, Commands.FILE_OPEN);
+    removeMenuItemAndKeyBindings(Menus.AppMenuBar.FILE_MENU, Commands.FILE_OPEN_FOLDER);
+    
+    // Add new menu items
+    var menu = Menus.getMenu(Menus.AppMenuBar.FILE_MENU);
+    CommandManager.register("Delete", exports.FILE_DELETE, handleDelete);
     
     menu.addMenuItem(exports.FILE_DELETE, "Ctrl-Alt-D", Menus.AFTER, Commands.FILE_CLOSE_ALL);
     var cmenu = Menus.getContextMenu(Menus.ContextMenuIds.PROJECT_MENU);
     cmenu.addMenuItem(exports.FILE_DELETE);
+    
+    
+    // Add Node menu
+    menu = Menus.addMenu(Strings.NODE_MENU_NAME, exports.NODE_MENU, Menus.AFTER, Menus.AppMenuBar.DEBUG_MENU);
+    
+    // Add Browse menu item
+    CommandManager.register(Strings.NODE_BROWSE, exports.NODE_BROWSE, handleBrowse);
+    menu.addMenuItem(exports.NODE_BROWSE, "Ctrl-B");
+    
+    // Add Serach NPM menu item
+    CommandManager.register(Strings.NODE_SERACH_NPM, exports.NODE_SERACH_NPM, handleSearchNPM);
+    menu.addMenuItem(exports.NODE_SERACH_NPM);
+    
+    // Add Modules menu item
+    CommandManager.register(Strings.NODE_MODULES, exports.NODE_MODULES, handleModules);
+    menu.addMenuItem(exports.NODE_MODULES);
+    
+    // Add Start/Restart menu item
+    CommandManager.register(Strings.NODE_START, exports.NODE_START, handleStart);
+    menu.addMenuItem(exports.NODE_START);
+    
+    // Add Stop menu item
+    CommandManager.register(Strings.NODE_STOP, exports.NODE_STOP, handleStop);
+    menu.addMenuItem(exports.NODE_STOP);
+    
+    // Add Terminal menu item
+    CommandManager.register(Strings.NODE_TERMINAL, exports.NODE_TERMINAL, handleStop);
+    menu.addMenuItem(exports.NODE_TERMINAL);
+    
+    // Add Options menu item
+    CommandManager.register(Strings.NODE_OPTIONS, exports.NODE_OPTIONS, handleStop);
+    menu.addMenuItem(exports.NODE_OPTIONS);
 });

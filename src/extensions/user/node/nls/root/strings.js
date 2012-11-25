@@ -14,5 +14,17 @@ define({
     "ERROR_DEL_FILE_MESSAGE"    : "<p>An error has occurred while deleting file: \"{0}\";</p>Error Message: <strong>{1}</strong>",
     "ERROR_DEL_FOLDER_TITLE"    : "Error Deleting Folder",
     "ERROR_DEL_FOLDER_MESSAGE"  : "<p>An error has occurred while deleting folder: \"{0}\";</p><strong>Error Message:</strong> {1}",
-    "ERROR_CODE_EPERM"          : "Operation not permitted. Please check the permissions of the file or directory and make sure it is not read-only or locked by other process."
+    "ERROR_CODE_EPERM"          : "Operation not permitted. Please check the permissions of the file or directory and make sure it is not read-only or locked by other process.",
+    "NODE_MENU_NAME"            : "Node",
+    "NODE_BROWSE"               : "Browse Live",
+    "NODE_SERACH_NPM"           : "Search NPM",
+    "NODE_MODULES"              : "Manage Modules",
+    "NODE_START"                : "Start Live Server",
+    "NODE_STOP"                 : "Stop Live Server",
+    "NODE_RESTART"              : "Restart Live Server",
+    "NODE_TERMINAL"             : "Text Terminal",
+    "NODE_OPTIONS"              : "Options",
+    "ERROR_NODE_START_TITLE"    : "Could Not Start Server",
+    "INFO_NODE_START_TITLE"     : "Live Server Started",
+    "INFO_NODE_START_MESSAGE"   : "Listening on port: {0}"
 });
