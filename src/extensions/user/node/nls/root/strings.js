@@ -4,10 +4,24 @@
 /*global define */
 
 define({
-    "DELETE_FOLDER_TITLE"       : "Delete Folder",
-    "DELETE_FOLDER_MESSAGE"     : "<p>Are you sure you want to permanently delete this folder and all subfolders and files?</p><strong>{0}</strong>",
-    "DELETE_FILE_TITLE"         : "Delete File",
-    "DELETE_FILE_MESSAGE"       : "<p>Are you sure you want to permanently delete this file?</p><strong>{0}</strong>",
+    /**
+     * Menu and commands
+     */
+    "CMD_DELETE"                : "Delete",
+        
+    "NODE_MENU"                 : "Node",
+    "CMD_BROWSE"                : "Browse Live",
+    "CMD_SERACH_NPM"            : "Search NPM",
+    "CMD_MODULES"               : "Manage Modules",
+    "CMD_START"                 : "Start Live Server",
+    "CMD_STOP"                  : "Stop Live Server",
+    "CMD_RESTART"               : "Restart Live Server",
+    "CMD_TERMINAL"              : "Text Terminal",
+    "CMD_OPTIONS"               : "Options",
+    
+    /**
+     * Errors
+     */
     "ERROR_REJECTED_REQUEST"    : "A request to <strong>\"{0}\"</strong> server was rejected. Please make sure the server is up and running.",
     "ERROR_SERVER_ERROR"        : "The server returned an error; status: {0}, state: {1}",
     "ERROR_DEL_FILE_TITLE"      : "Error Deleting File",
@@ -15,16 +29,15 @@ define({
     "ERROR_DEL_FOLDER_TITLE"    : "Error Deleting Folder",
     "ERROR_DEL_FOLDER_MESSAGE"  : "<p>An error has occurred while deleting folder: \"{0}\";</p><strong>Error Message:</strong> {1}",
     "ERROR_CODE_EPERM"          : "Operation not permitted. Please check the permissions of the file or directory and make sure it is not read-only or locked by other process.",
-    "NODE_MENU_NAME"            : "Node",
-    "NODE_BROWSE"               : "Browse Live",
-    "NODE_SERACH_NPM"           : "Search NPM",
-    "NODE_MODULES"              : "Manage Modules",
-    "NODE_START"                : "Start Live Server",
-    "NODE_STOP"                 : "Stop Live Server",
-    "NODE_RESTART"              : "Restart Live Server",
-    "NODE_TERMINAL"             : "Text Terminal",
-    "NODE_OPTIONS"              : "Options",
     "ERROR_NODE_START_TITLE"    : "Could Not Start Server",
+    
+    /**
+     * Dialogs
+     */
+    "DELETE_FOLDER_TITLE"       : "Delete Folder",
+    "DELETE_FOLDER_MESSAGE"     : "<p>Are you sure you want to permanently delete this folder and all subfolders and files?</p><strong>{0}</strong>",
+    "DELETE_FILE_TITLE"         : "Delete File",
+    "DELETE_FILE_MESSAGE"       : "<p>Are you sure you want to permanently delete this file?</p><strong>{0}</strong>",
     "INFO_NODE_START_TITLE"     : "Live Server Started",
     "INFO_NODE_START_MESSAGE"   : "Listening on port: {0}"
 });

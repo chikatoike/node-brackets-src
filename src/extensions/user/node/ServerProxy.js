@@ -7,8 +7,6 @@ define(function (require, exports, module) {
 
     var CommandManager      = require("command/CommandManager"),
         StringUtils         = require("utils/StringUtils");
-        //Dialogs             = brackets.getModule("widgets/Dialogs");
-        //Strings             = require("strings");
     
     var messageCount = 0;
     var callbacks = {};
@@ -290,72 +288,15 @@ define(function (require, exports, module) {
     }
 
     var app = {};
+    
+    app.callCommand = callCommand;
 
     /**
-     * Quits native shell application
+     * Quits browser window
      */
     app.quit = function () {
         window.open('', '_self', '');
         window.close();
-    };
-    
-    app.openLiveBrowser = function (url, enableRemoteDebugging, callback) {
-        console.log("Error: app.openLiveBrowser not implemented yet");
-    };
-
-    /**
-     * Invokes developer tools application
-     */
-    app.showDeveloperTools = function () {
-        console.log("Error: app.showDeveloperTools not implemented yet");
-    };
-
-    app.getElapsedMilliseconds = function () {
-        return 0;
-    };
-    
-    app.nodeBrowse = function () {
-        alert("Error: app.nodeBrowse not implemented yet");
-    };
-    
-    app.nodeSearchNPM = function () {
-        alert("Error: app.nodeSearchNPM not implemented yet");
-    };
-    
-    app.nodeModules = function () {
-        alert("Error: app.nodeModules not implemented yet");
-    };
-    
-    app.nodeStart = function () {
-        callCommand("app", "nodeStart", [], true, function (err, res) {
-            var title, dialog, message;
-            if (err) {
-                dialog  = "Dialogs.DIALOG_ID_ERROR";
-                title   = "Strings.ERROR_NODE_START_TITLE";
-                message = err;
-            } else {
-                dialog  = "Dialogs.DIALOG_ID_INFO";
-                title   = "Strings.INFO_NODE_START_TITLE";
-                message = StringUtils.format("Strings.INFO_NODE_START_MESSAGE", res.port);
-            }
-//            Dialogs.showModalDialog(
-//                dialog,
-//                title,
-//                message
-//            );
-        });
-    };
-    
-    app.nodeStop = function () {
-        alert("Error: app.nodeStop not implemented yet");
-    };
-    
-    app.nodeTerminal = function () {
-        alert("Error: app.nodeTerminal not implemented yet");
-    };
-    
-    app.nodeOptions = function () {
-        alert("Error: app.nodeOptions not implemented yet");
     };
 
     function getAppProxy() {
