@@ -108,25 +108,13 @@ define(function (require, exports, module) {
         }
     }
     
-    function handleBrowse() {
-        alert("Error: Browse not implemented yet");
-    }
-    
-    function handleSearchNPM() {
-        alert("Error: Search NPM not implemented yet");
-    }
-    
-    function handleModules() {
-        alert("Error: Modules not implemented yet");
-    }
-    
-    function handleStart() {
-        brackets.app.callCommand("app", "nodeStart", [], true, function (err, res) {
+    function callServerCommand(command, args) {
+        brackets.app.callCommand("app", command, args || [], true, function (err, res) {
             var title, dialog, message;
             if (err) {
                 dialog  = Dialogs.DIALOG_ID_ERROR;
                 title   = Strings.ERROR_NODE_START_TITLE;
-                message = err.description;
+                message = err.message;
             } else {
                 dialog  = Dialogs.DIALOG_ID_INFO;
                 title   = Strings.INFO_NODE_START_TITLE;
@@ -140,8 +128,24 @@ define(function (require, exports, module) {
         });
     }
     
+    function handleBrowse() {
+        alert("Error: Browse not implemented yet");
+    }
+    
+    function handleSearchNPM() {
+        alert("Error: Search NPM not implemented yet");
+    }
+    
+    function handleModules() {
+        alert("Error: Modules not implemented yet");
+    }
+    
+    function handleStart() {
+        callServerCommand("nodeStart");
+    }
+    
     function handleStop() {
-        alert("Error: Stop not implemented yet");
+        callServerCommand("nodeStop");
     }
     
     function handleTerminal() {
@@ -151,6 +155,7 @@ define(function (require, exports, module) {
     function handleOptions() {
         alert("Error: Options not implemented yet");
     }
+
     
     CommandManager.register(Strings.CMD_DELETE,     exports.FILE_DELETE,        handleDelete);
     CommandManager.register(Strings.CMD_BROWSE,     exports.NODE_BROWSE,        handleBrowse);
