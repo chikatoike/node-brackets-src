@@ -109,7 +109,20 @@ define(function (require, exports, module) {
     }
     
     function handleBrowse() {
-        alert("Error: Browse not implemented yet");
+        brackets.app.callCommand("app", "nodeStart", [], true, function (err, res) {
+            var response = err || res;
+            if (response.port) {
+                var loc = window.location,
+                    url = loc.protocol + "//" + loc.hostname + ":" + response.port;
+                window.open(url, "LiveServer", "toolbar=yes,location=yes,directories=yes,status=yes,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes");
+            } else {
+                Dialogs.showModalDialog(
+                    Dialogs.DIALOG_ID_ERROR,
+                    Strings.ERROR_NODE_START_TITLE,
+                    err.message
+                );
+            }
+        });
     }
     
     function handleSearchNPM() {
