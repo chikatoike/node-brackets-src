@@ -108,8 +108,20 @@ define(function (require, exports, module) {
         }
     }
     
-    function callServerCommand(command, args) {
-        brackets.app.callCommand("app", command, args || [], true, function (err, res) {
+    function handleBrowse() {
+        alert("Error: Browse not implemented yet");
+    }
+    
+    function handleSearchNPM() {
+        alert("Error: Search NPM not implemented yet");
+    }
+    
+    function handleModules() {
+        alert("Error: Modules not implemented yet");
+    }
+    
+    function handleStart() {
+        brackets.app.callCommand("app", "nodeStart", [], true, function (err, res) {
             var title, dialog, message;
             if (err) {
                 dialog  = Dialogs.DIALOG_ID_ERROR;
@@ -128,24 +140,24 @@ define(function (require, exports, module) {
         });
     }
     
-    function handleBrowse() {
-        alert("Error: Browse not implemented yet");
-    }
-    
-    function handleSearchNPM() {
-        alert("Error: Search NPM not implemented yet");
-    }
-    
-    function handleModules() {
-        alert("Error: Modules not implemented yet");
-    }
-    
-    function handleStart() {
-        callServerCommand("nodeStart");
-    }
-    
     function handleStop() {
-        callServerCommand("nodeStop");
+        brackets.app.callCommand("app", "nodeStop", [], true, function (err, res) {
+            var title, dialog, message;
+            if (err) {
+                dialog  = Dialogs.DIALOG_ID_ERROR;
+                title   = Strings.ERROR_NODE_STOP_TITLE;
+                message = err.message;
+            } else {
+                dialog  = Dialogs.DIALOG_ID_INFO;
+                title   = Strings.INFO_NODE_STOP_TITLE;
+                message = Strings.INFO_NODE_STOP_MESSAGE;
+            }
+            Dialogs.showModalDialog(
+                dialog,
+                title,
+                message
+            );
+        });
     }
     
     function handleTerminal() {
