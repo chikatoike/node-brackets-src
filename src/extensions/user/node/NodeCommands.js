@@ -114,7 +114,7 @@ define(function (require, exports, module) {
             if (response.port) {
                 var loc = window.location,
                     url = loc.protocol + "//" + loc.hostname + ":" + response.port;
-                window.open(url, "LiveServer", "toolbar=yes,location=yes,directories=yes,status=yes,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes");
+                window.open(url);
             } else {
                 Dialogs.showModalDialog(
                     Dialogs.DIALOG_ID_ERROR,
