@@ -828,7 +828,7 @@ define(function (require, exports, module) {
     
     /**
      * Gets the root DOM node of the editor.
-     * @returns {Object} The editor's root DOM node.
+     * @returns {!HTMLDivElement} The editor's root DOM node.
      */
     Editor.prototype.getRootElement = function () {
         return this._codeMirror.getWrapperElement();
@@ -838,7 +838,7 @@ define(function (require, exports, module) {
      * Gets the lineSpace element within the editor (the container around the individual lines of code).
      * FUTURE: This is fairly CodeMirror-specific. Logic that depends on this may break if we switch
      * editors.
-     * @returns {Object} The editor's lineSpace element.
+     * @returns {!HTMLDivElement} The editor's lineSpace element.
      */
     Editor.prototype._getLineSpaceElement = function () {
         return $(".CodeMirror-lines", this.getScrollerElement()).children().get(0);
@@ -1001,12 +1001,8 @@ define(function (require, exports, module) {
      */
     Editor.prototype.refreshAll = function () {
         this.refresh();
-        this.getInlineWidgets().forEach(function (multilineEditor, i, arr) {
-            multilineEditor.sizeInlineWidgetToContents(true);
-            multilineEditor._updateRelatedContainer();
-            multilineEditor.editors.forEach(function (editor, j, arr) {
-                editor.refresh();
-            });
+        this.getInlineWidgets().forEach(function (inlineWidget) {
+            inlineWidget.refresh();
         });
     };
     
