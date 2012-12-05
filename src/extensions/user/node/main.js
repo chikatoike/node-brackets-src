@@ -32,7 +32,7 @@
  */
 
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
-/*global define, brackets, window, $ */
+/*global define, brackets, window, serverVariables, $ */
 
 define(["require", "exports", "module", "NodeMenus"], function (require, exports, module) {
     "use strict";
@@ -191,7 +191,13 @@ define(["require", "exports", "module", "NodeMenus"], function (require, exports
     ExtensionUtils.loadStyleSheet(module, "styles.css");
     
     AppInit.htmlReady(function () {
-        $("#project-title")
+        var title = $("#project-title");
+        
+        if (title.text() === ".") {
+            title.text(serverVariables.projectName);
+        }
+        
+        title
             .wrap("<div id='project-dropdown-toggle'></div>")
             .after("<span class='dropdown-arrow'></span>");
         $dropdownToggle = $("#project-dropdown-toggle").click(toggle);
