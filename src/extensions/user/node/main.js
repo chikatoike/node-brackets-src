@@ -197,9 +197,11 @@ define(["require", "exports", "module", "NodeMenus"], function (require, exports
             title.text(serverVariables.projectName);
         }
         
-        title
-            .wrap("<div id='project-dropdown-toggle'></div>")
-            .after("<span class='dropdown-arrow'></span>");
-        $dropdownToggle = $("#project-dropdown-toggle").click(toggle);
+        if (serverVariables.rootFolders.length > 1) {
+            title
+                .wrap("<div id='project-dropdown-toggle'></div>")
+                .after("<span class='dropdown-arrow'></span>");
+            $dropdownToggle = $("#project-dropdown-toggle").click(toggle);
+        }
     });
 });
