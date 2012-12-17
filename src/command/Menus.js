@@ -877,7 +877,9 @@ define(function (require, exports, module) {
         menu.addMenuItem(Commands.FILE_CLOSE_ALL,           "Ctrl-Shift-W");
         menu.addMenuDivider();
         menu.addMenuItem(Commands.FILE_SAVE,                "Ctrl-S");
-        menu.addMenuItem(Commands.FILE_SAVE_ALL,            "Ctrl-Alt-S");
+        menu.addMenuItem(Commands.FILE_SAVE_ALL,            [{key: "Ctrl-Alt-S",    platform: "win"},
+                                                             {key: "Ctrl-Shift-S",  platform: "linux"},
+                                                             {key: "Ctrl-Alt-S",    platform: "mac"}]);
         menu.addMenuDivider();
         menu.addMenuItem(Commands.FILE_LIVE_FILE_PREVIEW,   "Ctrl-Alt-P");
         menu.addMenuItem(Commands.FILE_LIVE_HIGHLIGHT,      "Ctrl-Shift-C");
@@ -890,34 +892,34 @@ define(function (require, exports, module) {
          */
         menu = addMenu(Strings.EDIT_MENU, AppMenuBar.EDIT_MENU);
         menu.addMenuItem(Commands.EDIT_SELECT_ALL,          "Ctrl-A");
-        menu.addMenuItem(Commands.EDIT_SELECT_LINE,         [{key: "Ctrl-L", platform: "win"},
-                                                             {key: "Ctrl-L", platform: "linux"},
-                                                             {key: "Ctrl-L", platform: "mac"}]);
+        menu.addMenuItem(Commands.EDIT_SELECT_LINE,         [{key: "Ctrl-L",        platform: "win"},
+                                                             {key: "Ctrl-L",        platform: "linux"},
+                                                             {key: "Ctrl-L",        platform: "mac"}]);
         menu.addMenuDivider();
         menu.addMenuItem(Commands.EDIT_FIND,                "Ctrl-F");
         menu.addMenuItem(Commands.EDIT_FIND_IN_FILES,       "Ctrl-Shift-F");
-        menu.addMenuItem(Commands.EDIT_FIND_NEXT,           [{key: "F3",     platform: "win"},
-                                                             {key: "F3",     platform: "linux"},
-                                                             {key: "Cmd-G", platform: "mac"}]);
+        menu.addMenuItem(Commands.EDIT_FIND_NEXT,           [{key: "F3",            platform: "win"},
+                                                             {key: "F3",            platform: "linux"},
+                                                             {key: "Cmd-G",         platform: "mac"}]);
 
         menu.addMenuItem(Commands.EDIT_FIND_PREVIOUS,       [{key: "Shift-F3",      platform: "win"},
-                                                             {key: "Shift-F3",     platform: "linux"},
-                                                             {key:  "Cmd-Shift-G", platform: "mac"}]);
+                                                             {key: "Shift-F3",      platform: "linux"},
+                                                             {key:  "Cmd-Shift-G",  platform: "mac"}]);
 
         menu.addMenuDivider();
-        menu.addMenuItem(Commands.EDIT_REPLACE,             [{key: "Ctrl-H",     platform: "win"},
-                                                             {key: "Ctrl-H",     platform: "linux"},
-                                                             {key: "Cmd-Alt-F", platform: "mac"}]);
+        menu.addMenuItem(Commands.EDIT_REPLACE,             [{key: "Ctrl-H",        platform: "win"},
+                                                             {key: "Ctrl-H",        platform: "linux"},
+                                                             {key: "Cmd-Alt-F",     platform: "mac"}]);
         menu.addMenuDivider();
-        menu.addMenuItem(Commands.EDIT_INDENT,              [{key: "Indent", displayKey: "Tab"}]);
-        menu.addMenuItem(Commands.EDIT_UNINDENT,            [{key: "Unindent", displayKey: "Shift-Tab"}]);
+        menu.addMenuItem(Commands.EDIT_INDENT,              [{key: "Indent",        displayKey: "Tab"}]);
+        menu.addMenuItem(Commands.EDIT_UNINDENT,            [{key: "Unindent",      displayKey: "Shift-Tab"}]);
         menu.addMenuItem(Commands.EDIT_DUPLICATE,           "Ctrl-D");
         menu.addMenuItem(Commands.EDIT_DELETE_LINES,        "Ctrl-Shift-D");
         menu.addMenuItem(Commands.EDIT_LINE_UP,             [{key: "Ctrl-Shift-Up", displayKey: "Ctrl-Shift-\u2191",
                                                               platform: "win"},
                                                              {key: "Ctrl-Shift-Up", displayKey: "Ctrl-Shift-\u2191",
                                                               platform: "linux"},
-                                                             {key:  "Cmd-Ctrl-Up", displayKey: "Cmd-Ctrl-\u2191",
+                                                             {key:  "Cmd-Ctrl-Up",  displayKey: "Cmd-Ctrl-\u2191",
                                                               platform: "mac"}]);
         menu.addMenuItem(Commands.EDIT_LINE_DOWN,           [{key: "Ctrl-Shift-Down", displayKey: "Ctrl-Shift-\u2193",
                                                               platform: "win"},
