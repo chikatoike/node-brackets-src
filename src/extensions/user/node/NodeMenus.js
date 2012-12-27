@@ -40,6 +40,8 @@ define(function (require, exports, module) {
     menu.addMenuItem(NodeCommands.NODE_MODULES);
     menu.addMenuItem(NodeCommands.NODE_START);
     menu.addMenuItem(NodeCommands.NODE_STOP);
+    menu.addMenuItem(NodeCommands.NODE_DEBUG);
+    menu.addMenuItem(NodeCommands.NODE_DEBUG_BRK);
     menu.addMenuItem(NodeCommands.NODE_TERMINAL);
     menu.addMenuItem(NodeCommands.NODE_OPTIONS);
 });
