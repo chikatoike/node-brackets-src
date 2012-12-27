@@ -22,6 +22,8 @@ define(function (require, exports, module) {
     exports.NODE_START          = "node.start";
     exports.NODE_STOP           = "node.stop";
     exports.NODE_RESTART        = "node.restart";
+    exports.NODE_DEBUG          = "node.debug";
+    exports.NODE_DEBUG_BRK      = "node.debug-brk";
     exports.NODE_TERMINAL       = "node.terminal";
     exports.NODE_OPTIONS        = "node.options";
     
@@ -125,6 +127,17 @@ define(function (require, exports, module) {
         });
     }
     
+    function debugHandler() {
+    }
+    
+    function handleDebug() {
+        
+    }
+    
+    function handleDebugBrk() {
+        
+    }
+    
     function handleSearchNPM() {
         alert("Error: Search NPM not implemented yet");
     }
@@ -188,6 +201,8 @@ define(function (require, exports, module) {
     CommandManager.register(Strings.CMD_MODULES,    exports.NODE_MODULES,       handleModules);
     CommandManager.register(Strings.CMD_START,      exports.NODE_START,         handleStart);
     CommandManager.register(Strings.CMD_STOP,       exports.NODE_STOP,          handleStop);
+    CommandManager.register(Strings.CMD_DEBUG,      exports.NODE_DEBUG,         handleDebug);
+    CommandManager.register(Strings.CMD_DEBUG_BRK,  exports.NODE_DEBUG_BRK,     handleDebugBrk);
     CommandManager.register(Strings.CMD_TERMINAL,   exports.NODE_TERMINAL,      handleTerminal);
     CommandManager.register(Strings.CMD_OPTIONS,    exports.NODE_OPTIONS,       handleOptions);
 });

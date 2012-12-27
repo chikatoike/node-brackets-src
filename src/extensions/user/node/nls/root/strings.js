@@ -16,6 +16,8 @@ define({
     "CMD_START"                 : "Start Live Server",
     "CMD_STOP"                  : "Stop Live Server",
     "CMD_RESTART"               : "Restart Live Server",
+    "CMD_DEBUG"                 : "Debug",
+    "CMD_DEBUG_BRK"             : "Debug & Break",
     "CMD_TERMINAL"              : "Text Terminal",
     "CMD_OPTIONS"               : "Options",
     
