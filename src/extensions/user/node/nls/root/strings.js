@@ -18,6 +18,7 @@ define({
     "CMD_RESTART"               : "Restart Live Server",
     "CMD_DEBUG"                 : "Debug",
     "CMD_DEBUG_BRK"             : "Debug & Break",
+    "CMD_STOP_DEBUG"            : "Stop Debugging",
     "CMD_TERMINAL"              : "Text Terminal",
     "CMD_OPTIONS"               : "Options",
     
@@ -33,6 +34,7 @@ define({
     "ERROR_CODE_EPERM"          : "Operation not permitted. Please check the permissions of the file or directory and make sure it is not read-only or locked by other process.",
     "ERROR_NODE_START_TITLE"    : "Could Not Start Server",
     "ERROR_NODE_STOP_TITLE"     : "Error Stopping Server",
+    "ERROR_SERVER_NOT_STARTED"  : "Server not started",
     
     /**
      * Dialogs

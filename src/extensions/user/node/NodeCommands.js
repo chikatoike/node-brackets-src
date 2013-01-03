@@ -9,7 +9,11 @@ define(function (require, exports, module) {
         ProjectManager          = brackets.getModule("project/ProjectManager"),
         Dialogs                 = brackets.getModule("widgets/Dialogs"),
         StringUtils             = brackets.getModule("utils/StringUtils"),
-        Strings                 = require("strings");
+        Strings                 = require("strings"),
+        livePort,
+        debugPort,
+        debuggerPort,
+        debugAppPort;
     
     /**
      * List of constants for command IDs.
@@ -24,6 +28,7 @@ define(function (require, exports, module) {
     exports.NODE_RESTART        = "node.restart";
     exports.NODE_DEBUG          = "node.debug";
     exports.NODE_DEBUG_BRK      = "node.debug-brk";
+    exports.NODE_STOP_DEBUG     = "node.debug-stop";
     exports.NODE_TERMINAL       = "node.terminal";
     exports.NODE_OPTIONS        = "node.options";
     
@@ -110,12 +115,34 @@ define(function (require, exports, module) {
         }
     }
     
+    function handleStart() {
+        brackets.app.callCommand("app", "nodeStart", [], true, function (err, res) {
+            var title, dialog, message;
+            if (err) {
+                dialog  = Dialogs.DIALOG_ID_ERROR;
+                title   = Strings.ERROR_NODE_START_TITLE;
+                message = err.message;
+            } else {
+                livePort = res.port;
+                dialog  = Dialogs.DIALOG_ID_INFO;
+                title   = Strings.INFO_NODE_START_TITLE;
+                message = StringUtils.format(Strings.INFO_NODE_START_MESSAGE, livePort);
+            }
+            Dialogs.showModalDialog(
+                dialog,
+                title,
+                message
+            );
+        });
+    }
+    
     function handleBrowse() {
         brackets.app.callCommand("app", "nodeStart", [], true, function (err, res) {
             var response = err || res;
             if (response.port) {
+                livePort = response.port;
                 var loc = window.location,
-                    url = loc.protocol + "//" + loc.hostname + ":" + response.port;
+                    url = loc.protocol + "//" + loc.hostname + ":" + livePort;
                 window.open(url);
             } else {
                 Dialogs.showModalDialog(
@@ -127,15 +154,82 @@ define(function (require, exports, module) {
         });
     }
     
-    function debugHandler() {
+    function openDebugWindow() {
+        var loc = window.location,
+            debuggerUrl = loc.protocol + "//" + loc.hostname + ":" + debuggerPort + "/debug?port=" + debugPort,
+            appUrl = loc.protocol + "//" + loc.hostname + ":" + debugAppPort;
+        
+        window.open(debuggerUrl);
+        window.open(appUrl);
+    }
+    
+    function stopHandler(port, debug) {
+        if (port) {
+            brackets.app.callCommand("app", "nodeStop", [port], true, function (err, res) {
+                var title, dialog, message;
+                if (err) {
+                    dialog  = Dialogs.DIALOG_ID_ERROR;
+                    title   = Strings.ERROR_NODE_STOP_TITLE;
+                    message = err.message;
+                } else {
+                    dialog  = Dialogs.DIALOG_ID_INFO;
+                    title   = Strings.INFO_NODE_STOP_TITLE;
+                    message = Strings.INFO_NODE_STOP_MESSAGE;
+                    if (debug) {
+                        debugAppPort = null;
+                        debugPort = null;
+                    } else {
+                        livePort = null;
+                    }
+                }
+                
+                Dialogs.showModalDialog(
+                    dialog,
+                    title,
+                    message
+                );
+            });
+        } else {
+            Dialogs.showModalDialog(
+                Dialogs.DIALOG_ID_ERROR,
+                Strings.ERROR_NODE_STOP_TITLE,
+                Strings.ERROR_SERVER_NOT_STARTED
+            );
+        }
+    }
+    
+    function debugHandler(cmd) {
+        if (debuggerPort && debugPort && debugAppPort) {
+            openDebugWindow();
+        } else {
+            brackets.app.callCommand("app", cmd, [], true, function (err, res) {
+                var response = err || res;
+                if (response.port) {
+                    debugAppPort = response.port;
+                    debugPort = response.debugPort;
+                    debuggerPort = response.debuggerPort;
+                    openDebugWindow();
+                } else {
+                    Dialogs.showModalDialog(
+                        Dialogs.DIALOG_ID_ERROR,
+                        Strings.ERROR_NODE_START_TITLE,
+                        err.message
+                    );
+                }
+            });
+        }
     }
     
     function handleDebug() {
-        
+        debugHandler("nodeStartDebug");
     }
     
     function handleDebugBrk() {
-        
+        debugHandler("nodeStartDebugBrk");
+    }
+    
+    function handleStopDebug() {
+        stopHandler(debugAppPort, true);
     }
     
     function handleSearchNPM() {
@@ -146,44 +240,8 @@ define(function (require, exports, module) {
         alert("Error: Modules not implemented yet");
     }
     
-    function handleStart() {
-        brackets.app.callCommand("app", "nodeStart", [], true, function (err, res) {
-            var title, dialog, message;
-            if (err) {
-                dialog  = Dialogs.DIALOG_ID_ERROR;
-                title   = Strings.ERROR_NODE_START_TITLE;
-                message = err.message;
-            } else {
-                dialog  = Dialogs.DIALOG_ID_INFO;
-                title   = Strings.INFO_NODE_START_TITLE;
-                message = StringUtils.format(Strings.INFO_NODE_START_MESSAGE, res.port);
-            }
-            Dialogs.showModalDialog(
-                dialog,
-                title,
-                message
-            );
-        });
-    }
-    
     function handleStop() {
-        brackets.app.callCommand("app", "nodeStop", [], true, function (err, res) {
-            var title, dialog, message;
-            if (err) {
-                dialog  = Dialogs.DIALOG_ID_ERROR;
-                title   = Strings.ERROR_NODE_STOP_TITLE;
-                message = err.message;
-            } else {
-                dialog  = Dialogs.DIALOG_ID_INFO;
-                title   = Strings.INFO_NODE_STOP_TITLE;
-                message = Strings.INFO_NODE_STOP_MESSAGE;
-            }
-            Dialogs.showModalDialog(
-                dialog,
-                title,
-                message
-            );
-        });
+        stopHandler(livePort, false);
     }
     
     function handleTerminal() {
@@ -203,6 +261,7 @@ define(function (require, exports, module) {
     CommandManager.register(Strings.CMD_STOP,       exports.NODE_STOP,          handleStop);
     CommandManager.register(Strings.CMD_DEBUG,      exports.NODE_DEBUG,         handleDebug);
     CommandManager.register(Strings.CMD_DEBUG_BRK,  exports.NODE_DEBUG_BRK,     handleDebugBrk);
+    CommandManager.register(Strings.CMD_STOP_DEBUG, exports.NODE_STOP_DEBUG,    handleStopDebug);
     CommandManager.register(Strings.CMD_TERMINAL,   exports.NODE_TERMINAL,      handleTerminal);
     CommandManager.register(Strings.CMD_OPTIONS,    exports.NODE_OPTIONS,       handleOptions);
 });
