@@ -46,5 +46,6 @@ define({
     "INFO_NODE_START_TITLE"     : "Live Server Started",
     "INFO_NODE_START_MESSAGE"   : "Listening on port: {0}",
     "INFO_NODE_STOP_TITLE"      : "Live Server",
-    "INFO_NODE_STOP_MESSAGE"    : "Server is stopped."
+    "INFO_NODE_STOP_MESSAGE"    : "Server is stopped.",
+    "WAITING_SERVER"            : "<h1>Waiting for server to start ...</h1>"
 });

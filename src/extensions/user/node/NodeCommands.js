@@ -13,7 +13,9 @@ define(function (require, exports, module) {
         livePort,
         debugPort,
         debuggerPort,
-        debugAppPort;
+        debugAppPort,
+        liveWin,
+        debuggerWin;
     
     /**
      * List of constants for command IDs.
@@ -136,31 +138,47 @@ define(function (require, exports, module) {
         });
     }
     
-    function handleBrowse() {
-        brackets.app.callCommand("app", "nodeStart", [], true, function (err, res) {
-            var response = err || res;
-            if (response.port) {
-                livePort = response.port;
-                var loc = window.location,
-                    url = loc.protocol + "//" + loc.hostname + ":" + livePort;
-                window.open(url);
-            } else {
-                Dialogs.showModalDialog(
-                    Dialogs.DIALOG_ID_ERROR,
-                    Strings.ERROR_NODE_START_TITLE,
-                    err.message
-                );
-            }
-        });
+    function setLocation(win, url, delay) {
+        if (delay) {
+            window.setTimeout(function () {
+                win.location = url;
+            }, 1000);
+        } else {
+            win.location = url;
+        }
     }
     
-    function openDebugWindow() {
-        var loc = window.location,
-            debuggerUrl = loc.protocol + "//" + loc.hostname + ":" + debuggerPort + "/debug?port=" + debugPort,
-            appUrl = loc.protocol + "//" + loc.hostname + ":" + debugAppPort;
+    function handleBrowse() {
         
-        window.open(debuggerUrl);
-        window.open(appUrl);
+        function openWindow(delay) {
+            var loc = window.location,
+                url = loc.protocol + "//" + loc.hostname + ":" + livePort;
+            
+            setLocation(liveWin, url, delay);
+        }
+        
+        if (!liveWin || liveWin.closed) {
+            liveWin = window.open("", "liveWin");
+            liveWin.document.body.innerHTML = Strings.WAITING_SERVER;
+        }
+        
+        if (livePort) {
+            openWindow(false);
+        } else {
+            brackets.app.callCommand("app", "nodeStart", [], true, function (err, res) {
+                var response = err || res;
+                if (response.port) {
+                    livePort = response.port;
+                    openWindow(true);
+                } else {
+                    Dialogs.showModalDialog(
+                        Dialogs.DIALOG_ID_ERROR,
+                        Strings.ERROR_NODE_START_TITLE,
+                        err.message
+                    );
+                }
+            });
+        }
     }
     
     function stopHandler(port, debug) {
@@ -175,11 +193,22 @@ define(function (require, exports, module) {
                     dialog  = Dialogs.DIALOG_ID_INFO;
                     title   = Strings.INFO_NODE_STOP_TITLE;
                     message = Strings.INFO_NODE_STOP_MESSAGE;
+                    
                     if (debug) {
                         debugAppPort = null;
                         debugPort = null;
+                        
+                        if (debuggerWin) {
+                            debuggerWin.close();
+                            debuggerWin = null;
+                        }
                     } else {
                         livePort = null;
+                    }
+                    
+                    if (liveWin) {
+                        liveWin.close();
+                        liveWin = null;
                     }
                 }
                 
@@ -199,25 +228,63 @@ define(function (require, exports, module) {
     }
     
     function debugHandler(cmd) {
-        if (debuggerPort && debugPort && debugAppPort) {
-            openDebugWindow();
-        } else {
-            brackets.app.callCommand("app", cmd, [], true, function (err, res) {
-                var response = err || res;
-                if (response.port) {
-                    debugAppPort = response.port;
-                    debugPort = response.debugPort;
-                    debuggerPort = response.debuggerPort;
-                    openDebugWindow();
-                } else {
-                    Dialogs.showModalDialog(
-                        Dialogs.DIALOG_ID_ERROR,
-                        Strings.ERROR_NODE_START_TITLE,
-                        err.message
-                    );
-                }
-            });
+        
+        function openDebugWindows(delay) {
+            var loc = window.location,
+                debuggerUrl = loc.protocol + "//" + loc.hostname + ":" + debuggerPort + "/debug?port=" + debugPort,
+                appUrl = loc.protocol + "//" + loc.hostname + ":" + debugAppPort;
+            
+            setLocation(liveWin, appUrl, delay);
+            setLocation(debuggerWin, debuggerUrl, delay);
         }
+        
+        function startAndOpen() {
+            if (debuggerPort && debugPort && debugAppPort) {
+                openDebugWindows(false);
+            } else {
+                brackets.app.callCommand("app", cmd, [], true, function (err, res) {
+                    var response = err || res;
+                    if (response.port) {
+                        debugAppPort = response.port;
+                        debugPort = response.debugPort;
+                        debuggerPort = response.debuggerPort;
+                        openDebugWindows(true);
+                    } else {
+                        Dialogs.showModalDialog(
+                            Dialogs.DIALOG_ID_ERROR,
+                            Strings.ERROR_NODE_START_TITLE,
+                            err.message
+                        );
+                    }
+                });
+            }
+        }
+        
+        function prepareLiveWin(cb) {
+            if (!liveWin || liveWin.closed) {
+                liveWin = window.open("", "liveWin");
+                liveWin.document.body.innerHTML = Strings.WAITING_SERVER;
+                $(liveWin.document).ready(cb);
+            } else {
+                cb();
+            }
+        }
+        
+        function prepareDebuggerWin(cb) {
+            if (!debuggerWin || debuggerWin.closed) {
+                debuggerWin = window.open("", "debuggerWin");
+                debuggerWin.document.body.innerHTML = Strings.WAITING_SERVER;
+                $(debuggerWin.document).ready(cb);
+            } else {
+                cb();
+            }
+        }
+        
+        prepareLiveWin(function () {
+            prepareDebuggerWin(function () {
+                startAndOpen();
+            });
+        });
     }
     
     function handleDebug() {
