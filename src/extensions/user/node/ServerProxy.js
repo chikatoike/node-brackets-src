@@ -304,7 +304,7 @@ define(function (require, exports, module) {
     }
     
     app.getApplicationSupportDirectory = function () {
-        return serverVariables.bracketsRoot;
+        return serverVariables.worksRoot;
     };
 
     exports.getFileSystem = getFileSystem;

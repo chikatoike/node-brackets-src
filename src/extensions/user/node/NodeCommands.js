@@ -14,7 +14,9 @@ define(function (require, exports, module) {
         debugPort,
         debuggerPort,
         debugAppPort,
+        terminalPort,
         liveWin,
+        terminalWin,
         debuggerWin;
     
     /**
@@ -312,7 +314,35 @@ define(function (require, exports, module) {
     }
     
     function handleTerminal() {
-        alert("Error: Terminal not implemented yet");
+        function openWindow(delay) {
+            var loc = window.location,
+                url = loc.protocol + "//" + loc.hostname + ":" + terminalPort;
+            
+            setLocation(terminalWin, url, delay);
+        }
+        
+        if (!terminalWin || terminalWin.closed) {
+            terminalWin = window.open("", "terminalWin");
+            terminalWin.document.body.innerHTML = Strings.WAITING_SERVER;
+        }
+        
+        if (terminalWin) {
+            openWindow(false);
+        } else {
+            brackets.app.callCommand("app", "terminalStart", [], true, function (err, res) {
+                var response = err || res;
+                if (response.port) {
+                    terminalWin = response.port;
+                    openWindow(true);
+                } else {
+                    Dialogs.showModalDialog(
+                        Dialogs.DIALOG_ID_ERROR,
+                        Strings.ERROR_NODE_START_TITLE,
+                        err.message
+                    );
+                }
+            });
+        }
     }
     
     function handleOptions() {
