@@ -314,6 +314,7 @@ define(function (require, exports, module) {
     }
     
     function handleTerminal() {
+        
         function openWindow(delay) {
             var loc = window.location,
                 url = loc.protocol + "//" + loc.hostname + ":" + terminalPort;
@@ -326,13 +327,13 @@ define(function (require, exports, module) {
             terminalWin.document.body.innerHTML = Strings.WAITING_SERVER;
         }
         
-        if (terminalWin) {
+        if (terminalPort) {
             openWindow(false);
         } else {
             brackets.app.callCommand("app", "terminalStart", [], true, function (err, res) {
                 var response = err || res;
                 if (response.port) {
-                    terminalWin = response.port;
+                    terminalPort = response.port;
                     openWindow(true);
                 } else {
                     Dialogs.showModalDialog(
