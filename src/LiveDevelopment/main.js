@@ -49,7 +49,7 @@ define(function main(require, exports, module) {
         UrlParams           = require("utils/UrlParams").UrlParams,
         Strings             = require("strings");
 
-    var PREFERENCES_KEY = "com.adobe.brackets.live-development";
+    var PREFERENCES_CLIENT_ID = PreferencesManager.getClientId(module.id);
     var prefs;
     var params = new UrlParams();
     var config = {
@@ -188,7 +188,7 @@ define(function main(require, exports, module) {
     }
 
     /** Initialize LiveDevelopment */
-    function init() {
+    AppInit.appReady(function () {
         params.parse();
 
         Inspector.init(config);
@@ -204,12 +204,10 @@ define(function main(require, exports, module) {
         }
 
         // trigger autoconnect
-        if (config.autoconnect && window.sessionStorage.getItem("live.enabled") === "true") {
-            AppInit.appReady(function () {
-                if (DocumentManager.getCurrentDocument()) {
-                    _handleGoLiveCommand();
-                }
-            });
+        if (config.autoconnect &&
+                window.sessionStorage.getItem("live.enabled") === "true" &&
+                DocumentManager.getCurrentDocument()) {
+            _handleGoLiveCommand();
         }
         
         // Redraw highlights when window gets focus. This ensures that the highlights
@@ -219,10 +217,13 @@ define(function main(require, exports, module) {
                 LiveDevelopment.redrawHighlight();
             }
         });
-    }
+    });
     
     // init prefs
-    prefs = PreferencesManager.getPreferenceStorage(PREFERENCES_KEY, {highlight: true});
+    prefs = PreferencesManager.getPreferenceStorage(PREFERENCES_CLIENT_ID, {highlight: true});
+    //TODO: Remove preferences migration code
+    PreferencesManager.handleClientIdChange(prefs, "com.adobe.brackets.live-development", {highlight: true});
+    
     config.highlight = prefs.getValue("highlight");
    
     // init commands
@@ -231,5 +232,4 @@ define(function main(require, exports, module) {
     CommandManager.get(Commands.FILE_LIVE_HIGHLIGHT).setEnabled(false);
 
     // Export public functions
-    exports.init = init;
 });

@@ -71,6 +71,7 @@ define(function (require, exports, module) {
     exports.EDIT_BLOCK_COMMENT          = "edit.blockComment";
     exports.EDIT_LINE_UP                = "edit.lineUp";
     exports.EDIT_LINE_DOWN              = "edit.lineDown";
+    exports.TOGGLE_CLOSE_BRACKETS       = "edit.autoCloseBrackets";
 
     // VIEW
     exports.VIEW_HIDE_SIDEBAR           = "view.hideSidebar";
@@ -89,18 +90,11 @@ define(function (require, exports, module) {
     exports.NAVIGATE_SHOW_IN_FILE_TREE  = "navigate.showInFileTree";
     exports.NAVIGATE_QUICK_OPEN         = "navigate.quickOpen";
     exports.NAVIGATE_GOTO_DEFINITION    = "navigate.gotoDefinition";
+    exports.NAVIGATE_GOTO_JSLINT_ERROR  = "navigate.gotoJSLintError";
     exports.NAVIGATE_GOTO_LINE          = "navigate.gotoLine";
     exports.TOGGLE_QUICK_EDIT           = "navigate.toggleQuickEdit";
     exports.QUICK_EDIT_NEXT_MATCH       = "navigate.nextMatch";
     exports.QUICK_EDIT_PREV_MATCH       = "navigate.previousMatch";
-
-    // Debug
-    exports.DEBUG_REFRESH_WINDOW        = "debug.refreshWindow"; // string must MATCH string in native code (brackets_extensions)
-    exports.DEBUG_SHOW_DEVELOPER_TOOLS  = "debug.showDeveloperTools";
-    exports.DEBUG_RUN_UNIT_TESTS        = "debug.runUnitTests";
-    exports.DEBUG_SHOW_PERF_DATA        = "debug.showPerfData";
-    exports.DEBUG_NEW_BRACKETS_WINDOW   = "debug.newBracketsWindow";
-    exports.DEBUG_SWITCH_LANGUAGE       = "debug.switchLanguage";
 
     // Help
     exports.HELP_CHECK_FOR_UPDATE       = "help.checkForUpdate";

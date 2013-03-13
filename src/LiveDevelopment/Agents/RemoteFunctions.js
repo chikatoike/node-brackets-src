@@ -33,8 +33,22 @@
 function RemoteFunctions(experimental) {
     "use strict";
 
-    var HIGHLIGHT_CLASSNAME = "__brackets-ld-highlight";
+    var lastKeepAliveTime = Date.now();
     
+    var HIGHLIGHT_CLASSNAME = "__brackets-ld-highlight",
+        KEEP_ALIVE_TIMEOUT  = 3000;   // Keep alive timeout value, in milliseconds
+    
+    // determine whether an event should be processed for Live Development
+    function _validEvent(event) {
+        if (navigator.platform.substr(0, 3) === "Mac") {
+            // Mac
+            return event.metaKey;
+        } else {
+            // Windows
+            return event.ctrlKey;
+        }
+    }
+
     // determine the color for a type
     function _typeColor(type, highlight) {
         switch (type) {
@@ -294,6 +308,12 @@ function RemoteFunctions(experimental) {
             for (i = 0; i < highlights.length; i++) {
                 body.removeChild(highlights[i]);
             }
+
+            if (this.trigger) {
+                for (i = 0; i < this.elements.length; i++) {
+                    _trigger(this.elements[i], "highlight", 0);
+                }
+            }
             
             this.elements = [];
         },
@@ -337,17 +357,15 @@ function RemoteFunctions(experimental) {
     /** Event Handlers ***********************************************************/
 
     function onMouseOver(event) {
-        if (!event.metaKey) {
-            return;
+        if (_validEvent(event)) {
+            _localHighlight.add(event.target, true);
         }
-        _localHighlight.add(event.target, true);
     }
 
     function onMouseOut(event) {
-        if (!event.metaKey) {
-            return;
+        if (_validEvent(event)) {
+            _localHighlight.clear();
         }
-        _localHighlight.clear();
     }
 
     function onMouseMove(event) {
@@ -356,20 +374,19 @@ function RemoteFunctions(experimental) {
     }
 
     function onClick(event) {
-        if (!event.metaKey) {
-            return;
-        }
-        event.preventDefault();
-        event.stopPropagation();
-        if (event.altKey) {
-            _toggleEditor(event.target);
-        } else {
-            _toggleMenu(event.target);
+        if (_validEvent(event)) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (event.altKey) {
+                _toggleEditor(event.target);
+            } else {
+                _toggleMenu(event.target);
+            }
         }
     }
 
     function onKeyUp(event) {
-        if (_setup && !event.metaKey) {
+        if (_setup && !_validEvent(event)) {
             document.removeEventListener("keyup", onKeyUp);
             document.removeEventListener("mouseover", onMouseOver);
             document.removeEventListener("mouseout", onMouseOut);
@@ -382,7 +399,7 @@ function RemoteFunctions(experimental) {
     }
 
     function onKeyDown(event) {
-        if (!_setup && event.metaKey) {
+        if (!_setup && _validEvent(event)) {
             document.addEventListener("keyup", onKeyUp);
             document.addEventListener("mouseover", onMouseOver);
             document.addEventListener("mouseout", onMouseOut);
@@ -395,6 +412,13 @@ function RemoteFunctions(experimental) {
 
     /** Public Commands **********************************************************/
 
+    // keep alive. Called once a second when a Live Development connection is active.
+    // If several seconds have passed without this method being called, we can assume
+    // that the connection has been severed and we should remove all our code/hooks.
+    function keepAlive() {
+        lastKeepAliveTime = Date.now();
+    }
+    
     // show goto
     function showGoto(targets) {
         if (!_currentMenu) {
@@ -452,7 +476,8 @@ function RemoteFunctions(experimental) {
     window.addEventListener("resize", redrawHighlights);
     // Add a capture-phase scroll listener to update highlights when
     // any element scrolls.
-    window.addEventListener("scroll", function (e) {
+    
+    function _scrollHandler(e) {
         // Document scrolls can be updated immediately. Any other scrolls
         // need to be updated on a timer to ensure the layout is correct.
         if (e.target === document) {
@@ -462,9 +487,26 @@ function RemoteFunctions(experimental) {
                 window.setTimeout(redrawHighlights, 0);
             }
         }
-    }, true);
+    }
+    
+    window.addEventListener("scroll", _scrollHandler, true);
+    
+    var aliveTest = window.setInterval(function () {
+        if (Date.now() > lastKeepAliveTime + KEEP_ALIVE_TIMEOUT) {
+            // Remove highlights
+            hideHighlight();
+            
+            // Remove listeners
+            window.removeEventListener("resize", redrawHighlights);
+            window.removeEventListener("scroll", _scrollHandler, true);
+            
+            // Clear this interval
+            window.clearInterval(aliveTest);
+        }
+    }, 1000);
 
     return {
+        "keepAlive": keepAlive,
         "showGoto": showGoto,
         "hideHighlight": hideHighlight,
         "highlight": highlight,
