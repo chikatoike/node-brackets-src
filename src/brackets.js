@@ -182,15 +182,7 @@ define(function (require, exports, module) {
         PerfUtils.addMeasurement("window.document Ready");
         
         EditorManager.setEditorHolder($("#editor-holder"));
-//<<<<<<< HEAD
-//        
-//        _initDragAndDropListeners();
-//        _initCommandHandlers();
-//        KeyBindingManager.init();
-//        Menus.init(); // key bindings should be initialized first
-//        _initWindowListeners();
-//=======
-
+        
         // Let the user know Brackets doesn't run in a web browser yet
         if (brackets.inBrowser) {
             Dialogs.showModalDialog(
@@ -199,7 +191,6 @@ define(function (require, exports, module) {
                 Strings.ERROR_IN_BROWSER
             );
         }
-//>>>>>>> upstream/master
 
         // Use quiet scrollbars if we aren't on Lion. If we're on Lion, only
         // use native scroll bars when the mouse is not plugged in or when

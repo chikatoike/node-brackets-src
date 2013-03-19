@@ -34,7 +34,7 @@ define(function (require, exports, module) {
     cmenu.addMenuItem(NodeCommands.FILE_DELETE);
     
     // Add Node menu
-    menu = Menus.addMenu(Strings.NODE_MENU, NodeCommands.NODE_MENU, Menus.AFTER, Menus.AppMenuBar.DEBUG_MENU);
+    menu = Menus.addMenu(Strings.NODE_MENU, NodeCommands.NODE_MENU, Menus.AFTER, Menus.AppMenuBar.NAVIGATE_MENU);
     menu.addMenuItem(NodeCommands.NODE_BROWSE, "Ctrl-B");
     menu.addMenuItem(NodeCommands.NODE_SERACH_NPM);
     menu.addMenuItem(NodeCommands.NODE_MODULES);
