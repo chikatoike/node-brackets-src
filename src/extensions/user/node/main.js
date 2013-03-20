@@ -190,10 +190,10 @@ define(["require", "exports", "module", "NodeMenus"], function (require, exports
     // Initialize extension
     ExtensionUtils.loadStyleSheet(module, "styles.css");
     
-    AppInit.htmlReady(function () {
+    AppInit.appReady(function () {
         var title = $("#project-title");
         
-        if (title.text() === ".") {
+        if (title.text() === "." || title.text() === "") {
             title.text(serverVariables.projectName);
         }
         

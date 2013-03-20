@@ -15,7 +15,11 @@
         "Ctrl-S"
     ],
     "file.saveAll":  [
-        "Ctrl-Alt-S"
+        "Ctrl-Alt-S",
+        {
+            "key": "Ctrl-Shift-S",
+            "platform": "linux"
+        }
     ],
     "file.liveFilePreview":  [
         "Ctrl-Alt-P"
