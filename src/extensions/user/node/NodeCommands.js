@@ -323,6 +323,7 @@ define(function (require, exports, module) {
         }
         
         if (!terminalWin || terminalWin.closed) {
+            terminalPort = null;
             terminalWin = window.open("", "terminalWin");
             terminalWin.document.body.innerHTML = Strings.WAITING_SERVER;
         }
@@ -350,7 +351,6 @@ define(function (require, exports, module) {
         alert("Error: Options not implemented yet");
     }
 
-    
     CommandManager.register(Strings.CMD_DELETE,     exports.FILE_DELETE,        handleDelete);
     CommandManager.register(Strings.CMD_BROWSE,     exports.NODE_BROWSE,        handleBrowse);
     CommandManager.register(Strings.CMD_SERACH_NPM, exports.NODE_SERACH_NPM,    handleSearchNPM);
