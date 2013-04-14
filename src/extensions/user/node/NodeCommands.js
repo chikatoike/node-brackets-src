@@ -20,6 +20,11 @@ define(function (require, exports, module) {
         debuggerWin;
     
     /**
+     * Replace Find in Files commands
+     */
+    //require("FindInFiles");
+    
+    /**
      * List of constants for command IDs.
      */
     exports.FILE_DELETE         = "node.file.delete";
