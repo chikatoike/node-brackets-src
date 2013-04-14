@@ -261,7 +261,7 @@ define(function (require, exports, module) {
         if (brackets.inBrowser) {
             $("body").addClass("in-browser");
         } else {
-            $("body").addClass("in-appshell");
+            $("body").addClass("in-browser");
         }
         
         // Localize MainViewHTML and inject into <BODY> tag
