@@ -40,6 +40,7 @@ define(function (require, exports, module) {
     
     function HttpEditor(document, makeMasterEditor, container, range) {
         
+        this.document = document;
         this.rootElement = elt("h1", "TEST");
         
         if (container.appendChild) {
@@ -65,6 +66,26 @@ define(function (require, exports, module) {
     };
     
     HttpEditor.prototype.refresh = function () {
+        
+    };
+    
+    HttpEditor.prototype.refreshAll = function () {
+        
+    };
+    
+    HttpEditor.prototype.getSelection = function () {
+        return { start: 0, end: 0 };
+    };
+    
+    HttpEditor.prototype.setSelection = function (start, end, center, centerOptions) {
+        
+    };
+    
+    HttpEditor.prototype.getScrollPos = function () {
+        return { x: 0, y: 0 };
+    };
+    
+    HttpEditor.prototype.setScrollPos = function (x, y) {
         
     };
     
