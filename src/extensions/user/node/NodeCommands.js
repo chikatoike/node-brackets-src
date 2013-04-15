@@ -307,7 +307,14 @@ define(function (require, exports, module) {
     }
     
     function handleSearchNPM() {
-        alert("Error: Search NPM not implemented yet");
+        //alert("Error: Search NPM not implemented yet");
+        
+        var DocumentManager     = brackets.getModule("document/DocumentManager"),
+            NativeFileSystem    = brackets.getModule("file/NativeFileSystem").NativeFileSystem,
+            fileEntry           = new NativeFileSystem.FileEntry("http://npmjs.org"),
+            doc                 = new DocumentManager.Document(fileEntry, null, "");
+        
+        DocumentManager.setCurrentDocument(doc);
     }
     
     function handleModules() {

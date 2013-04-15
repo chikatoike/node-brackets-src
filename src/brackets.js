@@ -161,13 +161,13 @@ define(function (require, exports, module) {
         EditorManager.setEditorHolder($("#editor-holder"));
         
         // Let the user know Brackets doesn't run in a web browser yet
-        if (brackets.inBrowser) {
-            Dialogs.showModalDialog(
-                Dialogs.DIALOG_ID_ERROR,
-                Strings.ERROR_IN_BROWSER_TITLE,
-                Strings.ERROR_IN_BROWSER
-            );
-        }
+//        if (brackets.inBrowser) {
+//            Dialogs.showModalDialog(
+//                Dialogs.DIALOG_ID_ERROR,
+//                Strings.ERROR_IN_BROWSER_TITLE,
+//                Strings.ERROR_IN_BROWSER
+//            );
+//        }
 
         // Use quiet scrollbars if we aren't on Lion. If we're on Lion, only
         // use native scroll bars when the mouse is not plugged in or when
@@ -261,7 +261,11 @@ define(function (require, exports, module) {
         if (brackets.inBrowser) {
             $("body").addClass("in-browser");
         } else {
+            // [node]: <<<<<< (We need menus in Browser)
+            // $("body").addClass("in-appshell");
+            // [node]: ======
             $("body").addClass("in-browser");
+            // [node]: >>>>>>
         }
         
         // Localize MainViewHTML and inject into <BODY> tag

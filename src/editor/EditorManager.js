@@ -110,7 +110,7 @@ define(function (require, exports, module) {
         
         $(exports).triggerHandler("activeEditorChange", [current, previous]);
     }
-	
+    	
     /**
      * Creates a new Editor bound to the given Document.
      * The editor is appended to the given container as a visible child.
@@ -247,7 +247,7 @@ define(function (require, exports, module) {
     function _createFullEditorForDocument(document) {
         // Create editor; make it initially invisible
         var container = _editorHolder.get(0);
-        var editor = _createEditorForDocument(document, true, container);
+        var editor = exports._createEditorForDocument(document, true, container);
         editor.setVisible(false);
     }
     
@@ -271,7 +271,7 @@ define(function (require, exports, module) {
      */
     function createInlineEditorForDocument(doc, range, inlineContent) {
         // Create the Editor
-        var inlineEditor = _createEditorForDocument(doc, false, inlineContent, range);
+        var inlineEditor = exports._createEditorForDocument(doc, false, inlineContent, range);
         
         return { content: inlineContent, editor: inlineEditor };
     }
@@ -704,6 +704,7 @@ define(function (require, exports, module) {
     exports._resetViewStates = _resetViewStates;
     exports._doShow = _doShow;
     exports._notifyActiveEditorChanged = _notifyActiveEditorChanged;
+    exports._createEditorForDocument = _createEditorForDocument;
     
     exports.REFRESH_FORCE = REFRESH_FORCE;
     exports.REFRESH_SKIP = REFRESH_SKIP;
