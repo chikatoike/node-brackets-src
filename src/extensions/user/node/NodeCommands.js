@@ -30,7 +30,6 @@ define(function (require, exports, module) {
     exports.FILE_DELETE         = "node.file.delete";
     exports.NODE_MENU           = "node-menu";
     exports.NODE_BROWSE         = "node.browse";
-    exports.NODE_SERACH_NPM     = "node.search-npm";
     exports.NODE_MODULES        = "node.modules";
     exports.NODE_START          = "node.start";
     exports.NODE_STOP           = "node.stop";
@@ -306,19 +305,24 @@ define(function (require, exports, module) {
         stopHandler(debugAppPort, true);
     }
     
-    function handleSearchNPM() {
-        //alert("Error: Search NPM not implemented yet");
-        
+//    function handleSearchNPM() {
+//        //alert("Error: Search NPM not implemented yet");
+//        
+//        var DocumentManager     = brackets.getModule("document/DocumentManager"),
+//            NativeFileSystem    = brackets.getModule("file/NativeFileSystem").NativeFileSystem,
+//            fileEntry           = new NativeFileSystem.FileEntry("http://expressjs.com/"),
+//            doc                 = new DocumentManager.Document(fileEntry, null, "");
+//        
+//        DocumentManager.setCurrentDocument(doc);
+//    }
+    
+    function handleModules() {
         var DocumentManager     = brackets.getModule("document/DocumentManager"),
             NativeFileSystem    = brackets.getModule("file/NativeFileSystem").NativeFileSystem,
-            fileEntry           = new NativeFileSystem.FileEntry("http://npmjs.org"),
+            fileEntry           = new NativeFileSystem.FileEntry("form://extensions/user/node/modules.html"),
             doc                 = new DocumentManager.Document(fileEntry, null, "");
         
         DocumentManager.setCurrentDocument(doc);
-    }
-    
-    function handleModules() {
-        alert("Error: Modules not implemented yet");
     }
     
     function handleStop() {
@@ -365,7 +369,6 @@ define(function (require, exports, module) {
 
     CommandManager.register(Strings.CMD_DELETE,     exports.FILE_DELETE,        handleDelete);
     CommandManager.register(Strings.CMD_BROWSE,     exports.NODE_BROWSE,        handleBrowse);
-    CommandManager.register(Strings.CMD_SERACH_NPM, exports.NODE_SERACH_NPM,    handleSearchNPM);
     CommandManager.register(Strings.CMD_MODULES,    exports.NODE_MODULES,       handleModules);
     CommandManager.register(Strings.CMD_START,      exports.NODE_START,         handleStart);
     CommandManager.register(Strings.CMD_STOP,       exports.NODE_STOP,          handleStop);

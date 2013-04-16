@@ -118,7 +118,7 @@ define(function (require, exports, module) {
     var serverProxy = require("extensions/user/node/ServerProxy");
     global.brackets.fs = serverProxy.getFileSystem();
     global.brackets.app = serverProxy.getAppProxy();
-    global.brackets.inBrowser = false;
+    global.brackets.inBrowser = true;
     global.brackets.config.app_title = global.serverVariables.projectName;
     // [node]: >>>>>>
 

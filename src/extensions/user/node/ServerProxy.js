@@ -298,6 +298,10 @@ define(function (require, exports, module) {
         window.open('', '_self', '');
         window.close();
     };
+    
+    app.openURLInDefaultBrowser = function (callback, url) {
+        window.open(url);
+    }
 
     function getAppProxy() {
         return app;

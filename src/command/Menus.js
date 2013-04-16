@@ -154,11 +154,7 @@ define(function (require, exports, module) {
     }
     
     function _isHTMLMenu(id) {
-        // [node]: <<<<<< (We need menus in Browser)
-        // return (brackets.inBrowser || _isContextMenu(id));
-        // [node]: ======
-        return true;
-        // [node]: >>>>>>
+        return (brackets.inBrowser || _isContextMenu(id));
     }
 
     /**

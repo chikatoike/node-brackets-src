@@ -41,7 +41,12 @@ define(function (require, exports, module) {
     function HttpEditor(document, makeMasterEditor, container, range) {
         
         this.document = document;
-        this.rootElement = elt("h1", "TEST");
+        document.addRef();
+        
+        this.rootElement = elt("iframe");
+        this.rootElement.style.width = "100%";
+        this.rootElement.seamless = "seamless";
+        this.rootElement.src = document.file.fullPath;
         
         if (container.appendChild) {
             container.appendChild(this.rootElement);
@@ -59,6 +64,11 @@ define(function (require, exports, module) {
         if (show && (refresh || refresh === undefined)) {
             this.refresh();
         }
+    };
+    
+    HttpEditor.prototype.destroy = function () {
+        $(this.getRootElement()).remove();
+        this.document.releaseRef();
     };
     
     HttpEditor.prototype.focus = function () {

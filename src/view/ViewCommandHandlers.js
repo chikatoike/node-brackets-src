@@ -213,7 +213,11 @@ define(function (require, exports, module) {
             }
             
             // Font Size preferences only need to be loaded one time
-            if (!_fontSizePrefsLoaded) {
+            // [node]: <<<<<< (needed to support non CodeMirror editors)
+            // if (!_fontSizePrefsLoaded) {
+            // [node]: ======
+            if (!_fontSizePrefsLoaded && $(".CodeMirror").css("font-size")) {
+            // [node]: >>>>>>
                 _removeDynamicFontSize();
                 _adjustFontSize(_prefs.getValue("fontSizeAdjustment"));
                 _fontSizePrefsLoaded = true;

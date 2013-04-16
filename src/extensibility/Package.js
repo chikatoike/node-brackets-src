@@ -381,6 +381,15 @@ define(function (require, exports, module) {
     // TODO: duplicates code from StaticServer
     // TODO: can this be done lazily?
     AppInit.appReady(function () {
+        
+        // [node]: <<<<<< (Extensions will be handled on our server)
+        // [node]: ======
+        if (brackets.inBrowser) {
+            _nodeConnectionDeferred.reject();
+            return;
+        }
+        // [node]: >>>>>>
+        
         // Start up the node connection, which is held in the
         // _nodeConnectionDeferred module variable. (Use 
         // _nodeConnectionDeferred.done() to access it.

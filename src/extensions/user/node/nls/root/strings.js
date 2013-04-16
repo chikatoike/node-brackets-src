@@ -9,7 +9,7 @@ define({
      */
     "CMD_DELETE"                : "Delete",
         
-    "NODE_MENU"                 : "Node",
+    "NODE_MENU"                 : "Project",
     "CMD_BROWSE"                : "Browse Live",
     "CMD_SERACH_NPM"            : "Search NPM",
     "CMD_MODULES"               : "Manage Modules",

@@ -52,12 +52,16 @@ define(function (require, exports, module) {
         menu.addMenuDivider();
         menu.addMenuItem(Commands.FILE_SAVE);
         menu.addMenuItem(Commands.FILE_SAVE_ALL);
-        menu.addMenuDivider();
-        menu.addMenuItem(Commands.FILE_LIVE_FILE_PREVIEW);
-        menu.addMenuItem(Commands.FILE_LIVE_HIGHLIGHT);
-        menu.addMenuItem(Commands.FILE_PROJECT_SETTINGS);
-        menu.addMenuDivider();
-        menu.addMenuItem(Commands.FILE_INSTALL_EXTENSION);
+        
+        // [node]: <<<<<< (Apparently there is no way to remove menu divers and therefore this menu items are commented in the Brackets source.)
+//        menu.addMenuDivider();
+//        menu.addMenuItem(Commands.FILE_LIVE_FILE_PREVIEW);
+//        menu.addMenuItem(Commands.FILE_LIVE_HIGHLIGHT);
+//        menu.addMenuItem(Commands.FILE_PROJECT_SETTINGS);
+//        menu.addMenuDivider();
+//        menu.addMenuItem(Commands.FILE_INSTALL_EXTENSION);
+        // [node]: ======
+        // [node]: >>>>>>
         
         // supress redundant quit menu item on mac
         if (brackets.platform !== "mac" && !brackets.inBrowser) {
@@ -135,9 +139,13 @@ define(function (require, exports, module) {
          * Help menu
          */
         menu = Menus.addMenu(Strings.HELP_MENU, Menus.AppMenuBar.HELP_MENU);
-        menu.addMenuItem(Commands.HELP_CHECK_FOR_UPDATE);
-
-        menu.addMenuDivider();
+        
+        // [node]: <<<<<< (Brackets source cannot be updated independently form Nodeworks.)
+//        menu.addMenuItem(Commands.HELP_CHECK_FOR_UPDATE);
+//        menu.addMenuDivider();
+        // [node]: ======
+        // [node]: >>>>>>
+        
         if (brackets.config.how_to_use_url) {
             menu.addMenuItem(Commands.HELP_HOW_TO_USE_BRACKETS);
         }
@@ -151,16 +159,21 @@ define(function (require, exports, module) {
             menu.addMenuItem(Commands.HELP_REPORT_AN_ISSUE);
         }
 
-        menu.addMenuDivider();
-        menu.addMenuItem(Commands.HELP_SHOW_EXT_FOLDER);
-
+        // [node]: <<<<<< (Brackets extensions have to be managed on the server.)
+//        menu.addMenuDivider();
+//        menu.addMenuItem(Commands.HELP_SHOW_EXT_FOLDER);
+        // [node]: ======
+        // [node]: >>>>>>
 
         var hasAboutItem = (brackets.platform !== "mac" || brackets.inBrowser);
         
+        // [node]: <<<<<< (Brackets help memu is in single section to distiguish it from Nodeworks help)
         // Add final divider only if we have a twitter URL or about item
-        if (hasAboutItem || brackets.config.twitter_url) {
-            menu.addMenuDivider();
-        }
+//        if (hasAboutItem || brackets.config.twitter_url) {
+//            menu.addMenuDivider();
+//        }
+        // [node]: ======
+        // [node]: >>>>>>
         
         if (brackets.config.twitter_url) {
             menu.addMenuItem(Commands.HELP_TWITTER);
