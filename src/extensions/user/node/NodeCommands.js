@@ -317,7 +317,25 @@ define(function (require, exports, module) {
     function handleOptions() {
         alert("Error: Options not implemented yet");
     }
-
+    
+    exports.loadExtesions = function () {
+        brackets.app.callCommand("app", "getExtesions", [], true, function (err, res) {
+            var i;
+            
+            if (err) {
+                Dialogs.showModalDialog(
+                    Dialogs.DIALOG_ID_ERROR,
+                    "Extesions Couldn't Load",
+                    err.message
+                );
+            } else {
+                for (i = 0; i < res.length; i++) {
+                    require(res[i]);
+                }
+            }
+        });
+    };
+        
     CommandManager.register(Strings.CMD_DELETE,     exports.FILE_DELETE,        handleDelete);
     CommandManager.register(Strings.CMD_BROWSE,     exports.NODE_BROWSE,        handleBrowse);
     CommandManager.register(Strings.CMD_MODULES,    exports.NODE_MODULES,       handleModules);

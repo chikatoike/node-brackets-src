@@ -21,7 +21,7 @@ define(function (require, exports, module) {
         });
         menu.removeMenuItem(commandId);
     }
-    
+        
     // Remove menu items and key bindings that don’t make sense when Brackets is used in client / server scenario.
     removeMenuItemAndKeyBindings(Menus.AppMenuBar.FILE_MENU, Commands.FILE_OPEN);
     removeMenuItemAndKeyBindings(Menus.AppMenuBar.FILE_MENU, Commands.FILE_OPEN_FOLDER);
@@ -62,4 +62,6 @@ define(function (require, exports, module) {
     
     menu = Menus.addMenu(Strings.TOOLS_MENU, Menus.AppMenuBar.TOOLS_MENU, Menus.AFTER, Menus.AppMenuBar.PROJECT_MENU);
     menu.addMenuItem(NodeCommands.NODE_OPTIONS);
+    
+    NodeCommands.loadExtesions();
 });
