@@ -8,7 +8,6 @@ define(function (require, exports, module) {
         CommandManager          = brackets.getModule("command/CommandManager"),
         Menus                   = brackets.getModule("command/Menus"),
         KeyBindingManager       = brackets.getModule("command/KeyBindingManager"),
-        StringUtils             = brackets.getModule("utils/StringUtils"),
         Strings                 = require("strings"),
         NodeCommands            = require("NodeCommands");
     
@@ -39,8 +38,13 @@ define(function (require, exports, module) {
     var cmenu = Menus.getContextMenu(Menus.ContextMenuIds.PROJECT_MENU);
     cmenu.addMenuItem(NodeCommands.FILE_DELETE);
     
-    // Add Node menu
-    menu = Menus.addMenu(Strings.NODE_MENU, NodeCommands.NODE_MENU, Menus.AFTER, Menus.AppMenuBar.NAVIGATE_MENU);
+    // Add Project menu
+    
+    if (!Menus.AppMenuBar.PROJECT_MENU) {
+        Menus.AppMenuBar.PROJECT_MENU = "project-menu";
+    }
+    
+    menu = Menus.addMenu(Strings.PROJECT_MENU, Menus.AppMenuBar.PROJECT_MENU, Menus.AFTER, Menus.AppMenuBar.NAVIGATE_MENU);
     menu.addMenuItem(NodeCommands.NODE_BROWSE, "Ctrl-B");
     menu.addMenuItem(NodeCommands.NODE_SERACH_NPM);
     menu.addMenuItem(NodeCommands.NODE_MODULES);
@@ -49,6 +53,13 @@ define(function (require, exports, module) {
     menu.addMenuItem(NodeCommands.NODE_DEBUG);
     menu.addMenuItem(NodeCommands.NODE_DEBUG_BRK);
     menu.addMenuItem(NodeCommands.NODE_STOP_DEBUG);
-    menu.addMenuItem(NodeCommands.NODE_TERMINAL);
+    
+    // Add Tools menu
+    
+    if (!Menus.AppMenuBar.TOOLS_MENU) {
+        Menus.AppMenuBar.TOOLS_MENU = "tools-menu";
+    }
+    
+    menu = Menus.addMenu(Strings.TOOLS_MENU, Menus.AppMenuBar.TOOLS_MENU, Menus.AFTER, Menus.AppMenuBar.PROJECT_MENU);
     menu.addMenuItem(NodeCommands.NODE_OPTIONS);
 });

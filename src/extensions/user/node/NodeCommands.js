@@ -14,9 +14,7 @@ define(function (require, exports, module) {
         debugPort,
         debuggerPort,
         debugAppPort,
-        terminalPort,
         liveWin,
-        terminalWin,
         debuggerWin;
     
     /**
@@ -28,7 +26,6 @@ define(function (require, exports, module) {
      * List of constants for command IDs.
      */
     exports.FILE_DELETE         = "node.file.delete";
-    exports.NODE_MENU           = "node-menu";
     exports.NODE_BROWSE         = "node.browse";
     exports.NODE_MODULES        = "node.modules";
     exports.NODE_START          = "node.start";
@@ -37,7 +34,6 @@ define(function (require, exports, module) {
     exports.NODE_DEBUG          = "node.debug";
     exports.NODE_DEBUG_BRK      = "node.debug-brk";
     exports.NODE_STOP_DEBUG     = "node.debug-stop";
-    exports.NODE_TERMINAL       = "node.terminal";
     exports.NODE_OPTIONS        = "node.options";
     
     function getErrorMessage(errorCode) {
@@ -305,17 +301,6 @@ define(function (require, exports, module) {
         stopHandler(debugAppPort, true);
     }
     
-//    function handleSearchNPM() {
-//        //alert("Error: Search NPM not implemented yet");
-//        
-//        var DocumentManager     = brackets.getModule("document/DocumentManager"),
-//            NativeFileSystem    = brackets.getModule("file/NativeFileSystem").NativeFileSystem,
-//            fileEntry           = new NativeFileSystem.FileEntry("http://expressjs.com/"),
-//            doc                 = new DocumentManager.Document(fileEntry, null, "");
-//        
-//        DocumentManager.setCurrentDocument(doc);
-//    }
-    
     function handleModules() {
         var DocumentManager     = brackets.getModule("document/DocumentManager"),
             NativeFileSystem    = brackets.getModule("file/NativeFileSystem").NativeFileSystem,
@@ -327,40 +312,6 @@ define(function (require, exports, module) {
     
     function handleStop() {
         stopHandler(livePort, false);
-    }
-    
-    function handleTerminal() {
-        
-        function openWindow(delay) {
-            var loc = window.location,
-                url = loc.protocol + "//" + loc.hostname + ":" + terminalPort;
-            
-            setLocation(terminalWin, url, delay);
-        }
-        
-        if (!terminalWin || terminalWin.closed) {
-            terminalPort = null;
-            terminalWin = window.open("", "terminalWin");
-            terminalWin.document.body.innerHTML = Strings.WAITING_SERVER;
-        }
-        
-        if (terminalPort) {
-            openWindow(false);
-        } else {
-            brackets.app.callCommand("app", "terminalStart", [], true, function (err, res) {
-                var response = err || res;
-                if (response.port) {
-                    terminalPort = response.port;
-                    openWindow(true);
-                } else {
-                    Dialogs.showModalDialog(
-                        Dialogs.DIALOG_ID_ERROR,
-                        Strings.ERROR_NODE_START_TITLE,
-                        err.message
-                    );
-                }
-            });
-        }
     }
     
     function handleOptions() {
@@ -375,6 +326,5 @@ define(function (require, exports, module) {
     CommandManager.register(Strings.CMD_DEBUG,      exports.NODE_DEBUG,         handleDebug);
     CommandManager.register(Strings.CMD_DEBUG_BRK,  exports.NODE_DEBUG_BRK,     handleDebugBrk);
     CommandManager.register(Strings.CMD_STOP_DEBUG, exports.NODE_STOP_DEBUG,    handleStopDebug);
-    CommandManager.register(Strings.CMD_TERMINAL,   exports.NODE_TERMINAL,      handleTerminal);
     CommandManager.register(Strings.CMD_OPTIONS,    exports.NODE_OPTIONS,       handleOptions);
 });

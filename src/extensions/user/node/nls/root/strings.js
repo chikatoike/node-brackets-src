@@ -9,7 +9,8 @@ define({
      */
     "CMD_DELETE"                : "Delete",
         
-    "NODE_MENU"                 : "Project",
+    "PROJECT_MENU"              : "Project",
+    "TOOLS_MENU"                : "Tools",
     "CMD_BROWSE"                : "Browse Live",
     "CMD_SERACH_NPM"            : "Search NPM",
     "CMD_MODULES"               : "Manage Modules",
