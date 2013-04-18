@@ -1,5 +1,5 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
-/*global define, $, brackets, unescape, window */
+/*global define, $, brackets, unescape, window, requirejs */
 
 define(function (require, exports, module) {
     "use strict";
@@ -34,7 +34,8 @@ define(function (require, exports, module) {
     exports.NODE_DEBUG          = "node.debug";
     exports.NODE_DEBUG_BRK      = "node.debug-brk";
     exports.NODE_STOP_DEBUG     = "node.debug-stop";
-    exports.NODE_OPTIONS        = "node.options";
+    
+    exports.TOOLS_OPTIONS        = "tools.options";
     
     function getErrorMessage(errorCode) {
         if (errorCode) {
@@ -318,19 +319,46 @@ define(function (require, exports, module) {
         alert("Error: Options not implemented yet");
     }
     
+    function stripTrailingSlash(str) {
+        if (str.substr(-1) === '/') {
+            return str.substr(0, str.length - 1);
+        }
+        return str;
+    }
+    
     exports.loadExtesions = function () {
         brackets.app.callCommand("app", "getExtesions", [], true, function (err, res) {
-            var i;
+            var baseUrl = stripTrailingSlash(window.location.pathname) + "/extensions.svc/",
+                i,
+                val,
+                lIdx,
+                fIdx,
+                extName,
+                paths;
             
             if (err) {
                 Dialogs.showModalDialog(
                     Dialogs.DIALOG_ID_ERROR,
-                    "Extesions Couldn't Load",
+                    Strings.ERROR_EXT_LOAD_FAILED,
                     err.message
                 );
             } else {
                 for (i = 0; i < res.length; i++) {
-                    require(res[i]);
+                    paths = {};
+                    val = res[i];
+                    fIdx = val.indexOf("/");
+                    lIdx = val.lastIndexOf("/");
+                    extName = val.substr(0, fIdx);
+                    paths[extName] = val.substr(0, lIdx);
+                    
+                    try {
+                        requirejs.config({
+                            baseUrl: baseUrl,
+                            paths: paths
+                        })([baseUrl + val]);
+                    } catch (ex) {
+                        console.log(ex);
+                    }
                 }
             }
         });
@@ -344,5 +372,5 @@ define(function (require, exports, module) {
     CommandManager.register(Strings.CMD_DEBUG,      exports.NODE_DEBUG,         handleDebug);
     CommandManager.register(Strings.CMD_DEBUG_BRK,  exports.NODE_DEBUG_BRK,     handleDebugBrk);
     CommandManager.register(Strings.CMD_STOP_DEBUG, exports.NODE_STOP_DEBUG,    handleStopDebug);
-    CommandManager.register(Strings.CMD_OPTIONS,    exports.NODE_OPTIONS,       handleOptions);
+    CommandManager.register(Strings.CMD_OPTIONS,    exports.TOOLS_OPTIONS,       handleOptions);
 });

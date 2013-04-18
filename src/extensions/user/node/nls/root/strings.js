@@ -36,6 +36,7 @@ define({
     "ERROR_NODE_START_TITLE"    : "Could Not Start Server",
     "ERROR_NODE_STOP_TITLE"     : "Error Stopping Server",
     "ERROR_SERVER_NOT_STARTED"  : "Server not started",
+    "ERROR_EXT_LOAD_FAILED"     : "Extesions failed to load.",
     
     /**
      * Dialogs

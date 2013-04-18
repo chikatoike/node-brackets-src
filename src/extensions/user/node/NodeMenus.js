@@ -46,7 +46,6 @@ define(function (require, exports, module) {
     
     menu = Menus.addMenu(Strings.PROJECT_MENU, Menus.AppMenuBar.PROJECT_MENU, Menus.AFTER, Menus.AppMenuBar.NAVIGATE_MENU);
     menu.addMenuItem(NodeCommands.NODE_BROWSE, "Ctrl-B");
-    menu.addMenuItem(NodeCommands.NODE_SERACH_NPM);
     menu.addMenuItem(NodeCommands.NODE_MODULES);
     menu.addMenuItem(NodeCommands.NODE_START);
     menu.addMenuItem(NodeCommands.NODE_STOP);
@@ -61,7 +60,7 @@ define(function (require, exports, module) {
     }
     
     menu = Menus.addMenu(Strings.TOOLS_MENU, Menus.AppMenuBar.TOOLS_MENU, Menus.AFTER, Menus.AppMenuBar.PROJECT_MENU);
-    menu.addMenuItem(NodeCommands.NODE_OPTIONS);
+    menu.addMenuItem(NodeCommands.TOOLS_OPTIONS);
     
     NodeCommands.loadExtesions();
 });
