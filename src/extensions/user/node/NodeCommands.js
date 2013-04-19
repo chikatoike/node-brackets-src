@@ -26,8 +26,7 @@ define(function (require, exports, module) {
      * List of constants for command IDs.
      */
     exports.FILE_DELETE         = "node.file.delete";
-    exports.NODE_BROWSE         = "node.browse";
-    exports.NODE_MODULES        = "node.modules";
+    exports.PROJECT_LIVE        = "project.live";
     exports.NODE_START          = "node.start";
     exports.NODE_STOP           = "node.stop";
     exports.NODE_RESTART        = "node.restart";
@@ -302,15 +301,6 @@ define(function (require, exports, module) {
         stopHandler(debugAppPort, true);
     }
     
-    function handleModules() {
-        var DocumentManager     = brackets.getModule("document/DocumentManager"),
-            NativeFileSystem    = brackets.getModule("file/NativeFileSystem").NativeFileSystem,
-            fileEntry           = new NativeFileSystem.FileEntry("form://extensions/user/node/modules.html"),
-            doc                 = new DocumentManager.Document(fileEntry, null, "");
-        
-        DocumentManager.setCurrentDocument(doc);
-    }
-    
     function handleStop() {
         stopHandler(livePort, false);
     }
@@ -365,12 +355,11 @@ define(function (require, exports, module) {
     };
         
     CommandManager.register(Strings.CMD_DELETE,     exports.FILE_DELETE,        handleDelete);
-    CommandManager.register(Strings.CMD_BROWSE,     exports.NODE_BROWSE,        handleBrowse);
-    CommandManager.register(Strings.CMD_MODULES,    exports.NODE_MODULES,       handleModules);
+    CommandManager.register(Strings.CMD_BROWSE,     exports.PROJECT_LIVE,       handleBrowse);
     CommandManager.register(Strings.CMD_START,      exports.NODE_START,         handleStart);
     CommandManager.register(Strings.CMD_STOP,       exports.NODE_STOP,          handleStop);
     CommandManager.register(Strings.CMD_DEBUG,      exports.NODE_DEBUG,         handleDebug);
     CommandManager.register(Strings.CMD_DEBUG_BRK,  exports.NODE_DEBUG_BRK,     handleDebugBrk);
     CommandManager.register(Strings.CMD_STOP_DEBUG, exports.NODE_STOP_DEBUG,    handleStopDebug);
-    CommandManager.register(Strings.CMD_OPTIONS,    exports.TOOLS_OPTIONS,       handleOptions);
+    CommandManager.register(Strings.CMD_OPTIONS,    exports.TOOLS_OPTIONS,      handleOptions);
 });

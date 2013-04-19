@@ -11,7 +11,7 @@ define({
         
     "PROJECT_MENU"              : "Project",
     "TOOLS_MENU"                : "Tools",
-    "CMD_BROWSE"                : "Browse Live",
+    "CMD_BROWSE"                : "Live Preview...",
     "CMD_SERACH_NPM"            : "Search NPM",
     "CMD_MODULES"               : "Manage Modules",
     "CMD_START"                 : "Start Live Server",
@@ -21,7 +21,7 @@ define({
     "CMD_DEBUG_BRK"             : "Debug & Break",
     "CMD_STOP_DEBUG"            : "Stop Debugging",
     "CMD_TERMINAL"              : "Text Terminal",
-    "CMD_OPTIONS"               : "Options",
+    "CMD_OPTIONS"               : "Options...",
     
     /**
      * Errors

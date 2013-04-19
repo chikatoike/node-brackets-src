@@ -45,8 +45,7 @@ define(function (require, exports, module) {
     }
     
     menu = Menus.addMenu(Strings.PROJECT_MENU, Menus.AppMenuBar.PROJECT_MENU, Menus.AFTER, Menus.AppMenuBar.NAVIGATE_MENU);
-    menu.addMenuItem(NodeCommands.NODE_BROWSE, "Ctrl-B");
-    menu.addMenuItem(NodeCommands.NODE_MODULES);
+    menu.addMenuItem(NodeCommands.PROJECT_LIVE, "Alt-Shift-L");
     menu.addMenuItem(NodeCommands.NODE_START);
     menu.addMenuItem(NodeCommands.NODE_STOP);
     menu.addMenuItem(NodeCommands.NODE_DEBUG);

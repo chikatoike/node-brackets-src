@@ -224,8 +224,15 @@ define(function (require, exports, module) {
         }
         
         // Add to _workingSet making sure we store a different instance from the
-        // one in the Document. See issue #1971 for more details.        
+        // one in the Document. See issue #1971 for more details.
+        // [node]: <<<<<< (We need different name from the full path for the Forms extension.)
+        // file = new NativeFileSystem.FileEntry(file.fullPath);
+        // [node]: ======
+        var name = file.name;
         file = new NativeFileSystem.FileEntry(file.fullPath);
+        file.name = name;
+        // [node]: >>>>>>
+        
         _workingSet.push(file);
         
         // Add to MRU order: either first or last, depending on whether it's already the current doc or not
