@@ -1,5 +1,5 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
-/*global define, brackets, window, serverVariables, $ */
+/*global define, brackets, window, requirejs, $ */
 
 define(function (require, exports, module) {
     'use strict';
@@ -12,20 +12,37 @@ define(function (require, exports, module) {
         this.rootElement = util.elt("div");
         this.rootElement.id = "form-root";
         this.rootElement.style.width = "100%";
+        this._codeMirror = {
+            getValue: function () {
+                return "";
+            }
+        };
 
         var self    = this,
-            url     = util.stripTrailingSlash(window.location.pathname) + document.file.fullPath.substr(6),
-            ext     = url.substr(url.lastIndexOf("."));
+            baseUrl = util.stripTrailingSlash(window.location.pathname) + "/extensions.svc/",
+            path    = document.file.fullPath.substr(22),
+            ext     = path.substr(path.lastIndexOf(".")),
+            lIdx    = path.lastIndexOf("/"),
+            fIdx    = path.indexOf("/"),
+            extName = path.substr(0, fIdx),
+            paths   = {};
+        
+        paths[extName] = path.substr(0, lIdx);
+        
+        var req = requirejs.config({
+            baseUrl: baseUrl,
+            paths: paths
+        });
         
         if (ext === ".html") {
             // HTML form
-            require(["text!" + url + "!strip"], function (html) {
+            req(["text!" + baseUrl + path + "!strip"], function (html) {
                 $(self.rootElement).html(html);
                 self._appendRootElement(container);
             });
         } else {
             // Assume it is JavaScript function
-            require([url], function (extension) {
+            req([baseUrl + path], function (extension) {
                 self._appendRootElement(container);
                 extension(self);
             });
