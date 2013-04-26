@@ -70,6 +70,7 @@ define(function (require, exports, module) {
     };
     
     FormEditor.prototype.destroy = function () {
+        $(this).trigger("closing");
         $(this.getRootElement()).remove();
         this.document.releaseRef();
     };

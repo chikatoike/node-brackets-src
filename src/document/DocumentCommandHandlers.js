@@ -121,6 +121,11 @@ define(function (require, exports, module) {
         
         if (newDocument) {
             var fullPath = newDocument.file.fullPath;
+            
+            // [node]: <<<<<< (Do not show full path for form docs.)
+            // [node]: ======
+            if (newDocument.isForm) { fullPath = newDocument.file.name; }
+            // [node]: >>>>>>
     
             // In the main toolbar, show the project-relative path (if the file is inside the current project)
             // or the full absolute path (if it's not in the project).

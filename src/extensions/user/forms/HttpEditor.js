@@ -15,6 +15,11 @@ define(function (require, exports, module) {
         this.rootElement.style.width = "100%";
         this.rootElement.seamless = "seamless";
         this.rootElement.src = document.file.fullPath;
+        this._codeMirror = {
+            getValue: function () {
+                return "";
+            }
+        };
         
         if (container.appendChild) {
             container.appendChild(this.rootElement);
@@ -35,6 +40,7 @@ define(function (require, exports, module) {
     };
     
     HttpEditor.prototype.destroy = function () {
+        $(this).trigger("closing");
         $(this.getRootElement()).remove();
         this.document.releaseRef();
     };

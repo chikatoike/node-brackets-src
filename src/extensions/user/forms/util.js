@@ -41,5 +41,35 @@ define(function (require, exports, module) {
         }
         return str;
     };
+    
+    exports.startsWith = function (str, val) {
+        if (typeof val === "string") {
+            return str.slice(0, val.length) === val;
+        }
+        
+        var i, itm;
+        for (i = 0; i < val.length; i++) {
+            itm = val[i];
+            if (str.slice(0, itm.length) === itm) {
+                return true;
+            }
+        }
+        return false;
+    };
+    
+    exports.endsWith = function (str, val) {
+        if (typeof val === "string") {
+            return str.slice(-val.length) === val;
+        }
+        
+        var i, itm;
+        for (i = 0; i < val.length; i++) {
+            itm = val[i];
+            if (str.slice(-itm.length) === itm) {
+                return true;
+            }
+        }
+        return false;
+    };
 });
     
