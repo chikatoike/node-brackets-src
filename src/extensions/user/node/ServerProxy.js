@@ -301,7 +301,7 @@ define(function (require, exports, module) {
     
     app.openURLInDefaultBrowser = function (callback, url) {
         window.open(url);
-    }
+    };
 
     function getAppProxy() {
         return app;
