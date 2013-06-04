@@ -22,7 +22,7 @@
  */
 
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
-/*global define, window, $, PathUtils, Mustache, document */
+/*global define, window, $, brackets, PathUtils, Mustache, document */
 /*unittests: Install Extension Dialog*/
 
 define(function (require, exports, module) {
@@ -37,7 +37,8 @@ define(function (require, exports, module) {
         CommandManager         = require("command/CommandManager"),
         KeyEvent               = require("utils/KeyEvent"),
         Package                = require("extensibility/Package"),
-        InstallDialogTemplate  = require("text!extensibility/install-extension-dialog.html");
+        NativeApp              = require("utils/NativeApp"),
+        InstallDialogTemplate  = require("text!htmlContent/install-extension-dialog.html");
 
     var STATE_CLOSED            = 0,
         STATE_START             = 1,
@@ -84,6 +85,9 @@ define(function (require, exports, module) {
     /** @type {jQuery} The span containing the installation message. */
     InstallExtensionDialog.prototype.$msg = null;
     
+    /** @type {jQuery} The "Browse Extensions" button. */
+    InstallExtensionDialog.prototype.$browseExtensionsButton = null;
+    
     /** @type {$.Deferred} A deferred that's resolved/rejected when the dialog is closed and
         something has/hasn't been installed successfully. */
     InstallExtensionDialog.prototype._dialogDeferred = null;
@@ -117,21 +121,22 @@ define(function (require, exports, module) {
             this.$msgArea.hide();
             this.$inputArea.show();
             this.$okButton
-                .attr("disabled", "disabled")
+                .prop("disabled", true)
                 .text(Strings.INSTALL);
             break;
                 
         case STATE_VALID_URL:
-            this.$okButton.removeAttr("disabled");
+            this.$okButton.prop("disabled", false);
             break;
             
         case STATE_INSTALLING:
             url = this.$url.val();
             this.$inputArea.hide();
+            this.$browseExtensionsButton.hide();
             this.$msg.text(StringUtils.format(Strings.INSTALLING_FROM, url))
                 .append("<span class='spinner spin'/>");
             this.$msgArea.show();
-            this.$okButton.attr("disabled", "disabled");
+            this.$okButton.prop("disabled", true);
             this._installer.install(url)
                 .done(function () {
                     self._enterState(STATE_INSTALLED);
@@ -151,7 +156,7 @@ define(function (require, exports, module) {
         case STATE_CANCELING_INSTALL:
             // This should call back the STATE_INSTALLING fail() handler above, unless it's too late to cancel
             // in which case we'll still jump to STATE_INSTALLED after this
-            this.$cancelButton.attr("disabled", "disabled");
+            this.$cancelButton.prop("disabled", true);
             this.$msg.text(Strings.CANCELING_INSTALL);
             this._installer.cancel();
             window.setTimeout(function () {
@@ -269,10 +274,12 @@ define(function (require, exports, module) {
 
     /**
      * Initialize and show the dialog.
+     * @param {string=} urlToInstall If specified, immediately starts installing the given file as if the user had
+     *     specified it.
      * @return {$.Promise} A promise object that will be resolved when the selected extension
      *     has finished installing, or rejected if the dialog is cancelled.
      */
-    InstallExtensionDialog.prototype.show = function () {
+    InstallExtensionDialog.prototype.show = function (urlToInstall) {
         if (this._state !== STATE_CLOSED) {
             // Somehow the dialog got invoked twice. Just ignore this.
             return this._dialogDeferred.promise();
@@ -280,12 +287,7 @@ define(function (require, exports, module) {
         
         // We ignore the promise returned by showModalDialogUsingTemplate, since we're managing the 
         // lifecycle of the dialog ourselves.
-        Dialogs.showModalDialogUsingTemplate(
-            Mustache.render(InstallDialogTemplate, Strings),
-            null,
-            null,
-            false
-        );
+        Dialogs.showModalDialogUsingTemplate(Mustache.render(InstallDialogTemplate, Strings), false);
         
         this.$dlg          = $(".install-extension-dialog.instance");
         this.$url          = this.$dlg.find(".url").focus();
@@ -294,13 +296,23 @@ define(function (require, exports, module) {
         this.$inputArea    = this.$dlg.find(".input-field");
         this.$msgArea      = this.$dlg.find(".message-field");
         this.$msg          = this.$msgArea.find(".message");
+        this.$browseExtensionsButton = this.$dlg.find(".browse-extensions");
 
         this.$okButton.on("click", this._handleOk.bind(this));
         this.$cancelButton.on("click", this._handleCancel.bind(this));
         this.$url.on("input", this._handleUrlInput.bind(this));
+        this.$browseExtensionsButton.on("click", function () {
+            NativeApp.openURLInDefaultBrowser(brackets.config.extension_wiki_url);
+        });
         $(document.body).on("keyup.installDialog", this._handleKeyUp.bind(this));
         
         this._enterState(STATE_START);
+        if (urlToInstall) {
+            // Act as if the user had manually entered the URL.
+            this.$url.val(urlToInstall);
+            this._enterState(STATE_VALID_URL);
+            this._enterState(STATE_INSTALLING);
+        }
 
         this._dialogDeferred = new $.Deferred();
         return this._dialogDeferred.promise();
@@ -336,12 +348,28 @@ define(function (require, exports, module) {
      * @return {$.Promise} A promise object that will be resolved when the selected extension
      *     has finished installing, or rejected if the dialog is cancelled.
      */
-    function _showDialog(installer) {
+    function showDialog() {
         var dlg = new InstallExtensionDialog(new InstallerFacade());
         return dlg.show();
     }
     
-    CommandManager.register(Strings.CMD_INSTALL_EXTENSION, Commands.FILE_INSTALL_EXTENSION, _showDialog);
+    /**
+     * @private
+     * Show the installation dialog and automatically begin installing the given URL.
+     * @param {string=} urlToInstall If specified, immediately starts installing the given file as if the user had
+     *     specified it.
+     * @return {$.Promise} A promise object that will be resolved when the selected extension
+     *     has finished installing, or rejected if the dialog is cancelled.
+     */
+    function installUsingDialog(urlToInstall) {
+        var dlg = new InstallExtensionDialog(new InstallerFacade());
+        return dlg.show(urlToInstall);
+    }
+    
+    CommandManager.register(Strings.CMD_INSTALL_EXTENSION, Commands.FILE_INSTALL_EXTENSION, showDialog);
+    
+    exports.showDialog = showDialog;
+    exports.installUsingDialog = installUsingDialog;
 
     // Exposed for unit testing only
     exports._Dialog = InstallExtensionDialog;

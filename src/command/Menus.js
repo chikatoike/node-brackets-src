@@ -34,7 +34,8 @@ define(function (require, exports, module) {
         KeyBindingManager   = require("command/KeyBindingManager"),
         StringUtils         = require("utils/StringUtils"),
         CommandManager      = require("command/CommandManager"),
-        PopUpManager        = require("widgets/PopUpManager");
+        PopUpManager        = require("widgets/PopUpManager"),
+        ViewUtils           = require("utils/ViewUtils");
 
     /**
      * Brackets Application Menu Constants
@@ -91,23 +92,32 @@ define(function (require, exports, module) {
 
     
     /**
-      * Insertion position constants
-      * Used by addMenu(), addMenuItem(), and addSubMenu() to
-      * specify the relative position of a newly created menu object
-      * @enum {string}
-      */
-    var BEFORE =            "before";
-    var AFTER =             "after";
-    var FIRST =             "first";
-    var LAST =              "last";
-    var FIRST_IN_SECTION =  "firstInSection";
-    var LAST_IN_SECTION =   "lastInSection";
+     * Insertion position constants
+     * Used by addMenu(), addMenuItem(), and addSubMenu() to
+     * specify the relative position of a newly created menu object
+     * @enum {string}
+     */
+    var BEFORE           = "before",
+        AFTER            = "after",
+        FIRST            = "first",
+        LAST             = "last",
+        FIRST_IN_SECTION = "firstInSection",
+        LAST_IN_SECTION  = "lastInSection";
 
     /**
-      * Other constants
-      */
+     * Other constants
+     */
     var DIVIDER = "---";
-
+    
+    /**
+     * Error Codes from Brackets Shell
+     * @enum {number}
+     */
+    var NO_ERROR           = 0,
+        ERR_UNKNOWN        = 1,
+        ERR_INVALID_PARAMS = 2,
+        ERR_NOT_FOUND      = 3;
+    
     /**
      * Maps menuID's to Menu objects
      * @type {Object.<string, Menu>}
@@ -327,11 +337,7 @@ define(function (require, exports, module) {
      * @return {?HTMLLIElement} menu item list element
      */
     Menu.prototype._getRelativeMenuItem = function (relativeID, position) {
-        var $relativeElement,
-            key,
-            menuItem,
-            map,
-            foundMenuItem;
+        var $relativeElement;
         
         if (relativeID) {
             if (position === FIRST_IN_SECTION || position === LAST_IN_SECTION) {
@@ -462,7 +468,8 @@ define(function (require, exports, module) {
      * @return {MenuItem} the newly created MenuItem
      */
     Menu.prototype.addMenuItem = function (command, keyBindings, position, relativeID) {
-        var id,
+        var menuID = this.id,
+            id,
             $menuItem,
             $link,
             menuItem,
@@ -547,8 +554,17 @@ define(function (require, exports, module) {
             }
             
             brackets.app.addMenuItem(this.id, name, commandID, bindingStr, displayStr, position, relativeID, function (err) {
-                if (err) {
-                    console.error("addMenuItem() -- error: " + err + " when adding command: " + commandID);
+                switch (err) {
+                case NO_ERROR:
+                    break;
+                case ERR_INVALID_PARAMS:
+                    console.error("addMenuItem(): Invalid Parameters when adding the command " + commandID);
+                    break;
+                case ERR_NOT_FOUND:
+                    console.error("_getRelativeMenuItem(): MenuItem with Command id " + relativeID + " not found in the Menu " + menuID);
+                    break;
+                default:
+                    console.error("addMenuItem(); Unknown Error (" + err + ") when adding the command " + commandID);
                 }
             });
             menuItem.isNative = true;
@@ -675,13 +691,7 @@ define(function (require, exports, module) {
                 }
             });
         } else {
-            // Note, checked can also be undefined, so we explicitly check
-            // for truthiness and don't use toggleClass().
-            if (checked) {
-                $(_getHTMLMenuItem(this.id)).addClass("checked");
-            } else {
-                $(_getHTMLMenuItem(this.id)).removeClass("checked");
-            }
+            ViewUtils.toggleClass($(_getHTMLMenuItem(this.id)), "checked", checked);
         }
     };
 
@@ -698,7 +708,7 @@ define(function (require, exports, module) {
                 }
             });
         } else {
-            $(_getHTMLMenuItem(this.id)).toggleClass("disabled", !this._command.getEnabled());
+            ViewUtils.toggleClass($(_getHTMLMenuItem(this.id)), "disabled", !this._command.getEnabled());
         }
     };
 
@@ -800,15 +810,26 @@ define(function (require, exports, module) {
 
         if (!_isHTMLMenu(id)) {
             brackets.app.addMenu(name, id, position, relativeID, function (err) {
-                if (err) {
-                    console.error("addMenu() -- error: " + err + " when adding menu with ID: " + id);
-                } else {
+                switch (err) {
+                case NO_ERROR:
                     // Make sure name is up to date
                     brackets.app.setMenuTitle(id, name, function (err) {
                         if (err) {
                             console.error("setMenuTitle() -- error: " + err);
                         }
                     });
+                    break;
+                case ERR_UNKNOWN:
+                    console.error("addMenu(): Unknown Error when adding the menu " + id);
+                    break;
+                case ERR_INVALID_PARAMS:
+                    console.error("addMenu(): Invalid Parameters when adding the menu " + id);
+                    break;
+                case ERR_NOT_FOUND:
+                    console.error("addMenu(): Menu with command " + relativeID + " could not be found when adding the menu " + id);
+                    break;
+                default:
+                    console.error("addMenu(): Unknown Error (" + err + ") when adding the menu " + id);
                 }
             });
             return menu;
@@ -852,7 +873,7 @@ define(function (require, exports, module) {
 
         var $newMenu = $("<li class='dropdown context-menu' id='" + StringUtils.jQueryIdEscape(id) + "'></li>"),
             $popUp = $("<ul class='dropdown-menu'></ul>"),
-            $toggle = $("<a href='#' class='dropdown-toggle'></a>").hide();
+            $toggle = $("<a href='#' class='dropdown-toggle' data-toggle='dropdown'></a>").hide();
 
         // assemble the menu fragments
         $newMenu.append($toggle).append($popUp);
@@ -913,7 +934,7 @@ define(function (require, exports, module) {
         }
         posTop -= 30;   // shift top for hidden parent element
         posLeft += 5;
-
+        
         var rightOverhang = posLeft + $menuWindow.width() - $window.width();
         if (rightOverhang > 0) {
             posLeft = Math.max(0, posLeft - rightOverhang);
