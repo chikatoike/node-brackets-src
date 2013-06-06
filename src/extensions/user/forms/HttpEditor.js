@@ -18,6 +18,12 @@ define(function (require, exports, module) {
         this._codeMirror = {
             getValue: function () {
                 return "";
+            },
+            coordsChar: function () {
+                return {
+                    line: 0,
+                    ch: 0
+                };
             }
         };
         
@@ -55,6 +61,10 @@ define(function (require, exports, module) {
     
     HttpEditor.prototype.refreshAll = function () {
         
+    };
+    
+    HttpEditor.prototype.getSelection = function () {
+        return { start: 0, end: 0 };
     };
     
     HttpEditor.prototype.getSelection = function () {

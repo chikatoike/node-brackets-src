@@ -15,6 +15,17 @@ define(function (require, exports, module) {
         this._codeMirror = {
             getValue: function () {
                 return "";
+            },
+            coordsChar: function () {
+                return {
+                    line: 0,
+                    ch: 0
+                };
+            },
+            getTokenAt: function () {
+                return {};
+            },
+            getLine: function () {
             }
         };
 
@@ -85,6 +96,10 @@ define(function (require, exports, module) {
     
     FormEditor.prototype.refreshAll = function () {
         
+    };
+    
+    FormEditor.prototype.getInlineWidgets = function () {
+        return [];
     };
     
     FormEditor.prototype.getSelection = function () {
