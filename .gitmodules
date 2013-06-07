@@ -28,3 +28,6 @@
 [submodule "src/thirdparty/i18n"]
 	path = src/thirdparty/i18n
 	url = https://github.com/requirejs/i18n.git
+[submodule "src/extensions/user/MarkdownPreview"]
+	path = src/extensions/user/MarkdownPreview
+	url = https://github.com/gruehle/MarkdownPreview.git
