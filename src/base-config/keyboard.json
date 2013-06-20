@@ -8,6 +8,9 @@
     "file.close":  [
         "Ctrl-W"
     ],
+    "file.openFolder": [
+        "Ctrl-Alt-O"
+    ],
     "file.close_all":  [
         "Ctrl-Shift-W"
     ],
@@ -21,6 +24,9 @@
             "platform": "linux"
         }
     ],
+    "file.saveAs":  [
+        "Ctrl-Shift-S"
+    ],    
     "file.liveFilePreview":  [
         "Ctrl-Alt-P"
     ],

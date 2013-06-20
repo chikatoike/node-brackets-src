@@ -94,7 +94,8 @@ define(function (require, exports, module) {
         Resizer                 = require("utils/Resizer"),
         LiveDevelopmentMain     = require("LiveDevelopment/main"),
         NodeConnection          = require("utils/NodeConnection"),
-        ExtensionUtils          = require("utils/ExtensionUtils");
+        ExtensionUtils          = require("utils/ExtensionUtils"),
+        ColorUtils              = require("utils/ColorUtils");
             
     // Load modules that self-register and just need to get included in the main project
     require("command/DefaultMenus");
@@ -146,10 +147,10 @@ define(function (require, exports, module) {
             DOMAgent                : require("LiveDevelopment/Agents/DOMAgent"),
             Inspector               : require("LiveDevelopment/Inspector/Inspector"),
             NativeApp               : require("utils/NativeApp"),
+            ExtensionLoader         : ExtensionLoader,
             ExtensionUtils          : ExtensionUtils,
             UpdateNotification      : require("utils/UpdateNotification"),
             InstallExtensionDialog  : require("extensibility/InstallExtensionDialog"),
-            extensions              : {}, // place for extensions to hang modules for unit tests
             doneLoading             : false
         };
 
